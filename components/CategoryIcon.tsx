@@ -13,9 +13,10 @@ const ICONS: Record<WasteClassId, LucideIcon> = {
 interface CategoryIconProps {
   classId: WasteClassId;
   className?: string;
+  strokeWidth?: number;
 }
 
-export default function CategoryIcon({ classId, className }: CategoryIconProps) {
+export default function CategoryIcon({ classId, className, strokeWidth = 1.75 }: CategoryIconProps) {
   const Icon = ICONS[classId];
-  return <Icon className={className} aria-hidden="true" strokeWidth={1.75} />;
+  return <Icon className={className} aria-hidden="true" strokeWidth={strokeWidth} />;
 }
