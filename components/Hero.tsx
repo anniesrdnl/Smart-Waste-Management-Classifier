@@ -3,7 +3,7 @@ import HeroVisual from "./HeroVisual";
 
 export default function Hero() {
   return (
-    <section id="home" aria-labelledby="hero-heading" className="border-b border-line bg-surface">
+    <section id="home" aria-labelledby="hero-heading" className="border-b border-line bg-surface pt-19">
       <div className="page-container grid items-center gap-12 py-16 sm:py-20 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:py-24">
         <div>
           <p className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-medium text-brand-800">

@@ -26,7 +26,7 @@ export default function Categories() {
               <li
                 key={id}
                 id={`category-${id}`}
-                className="group card-interactive flex scroll-mt-28 gap-4 rounded-2xl border border-line bg-canvas p-5 hover:bg-surface target:border-brand-300 target:bg-brand-50/60 target:ring-2 target:ring-brand-200"
+                className="group card-interactive flex scroll-mt-32 gap-4 rounded-2xl border border-line bg-canvas p-5 hover:bg-surface target:border-brand-300 target:bg-brand-50/60 target:ring-2 target:ring-brand-200"
               >
                 <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-surface text-brand-700 ring-1 ring-line transition-colors duration-200 group-hover:bg-brand-600 group-hover:text-white group-hover:ring-brand-600 group-target:bg-brand-600 group-target:text-white">
                   <CategoryIcon classId={id} className="size-6" />

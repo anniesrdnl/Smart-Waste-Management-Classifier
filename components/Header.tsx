@@ -1,16 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Menu, Recycle, X } from "lucide-react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { ArrowRight, CloudUpload, House, Info, ListChecks, Menu, Recycle, X, type LucideIcon } from "lucide-react";
 
-const NAV_ITEMS = [
-  { id: "home", label: "Home" },
-  { id: "classifier", label: "Classify Waste" },
-  { id: "how-it-works", label: "How It Works" },
-  { id: "about", label: "About" },
-] as const;
+const NAV_ITEMS: readonly { id: string; label: string; icon: LucideIcon }[] = [
+  { id: "home", label: "Home", icon: House },
+  { id: "classifier", label: "Classify Waste", icon: CloudUpload },
+  { id: "how-it-works", label: "How It Works", icon: ListChecks },
+  { id: "about", label: "About", icon: Info },
+];
 
 type SectionId = (typeof NAV_ITEMS)[number]["id"];
+
+interface IndicatorRect {
+  left: number;
+  width: number;
+}
 
 function useActiveSection(): SectionId {
   const [active, setActive] = useState<SectionId>("home");
@@ -22,7 +27,7 @@ function useActiveSection(): SectionId {
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries.filter((entry) => entry.isIntersecting);
-        if (visible.length > 0) setActive(visible[0].target.id as SectionId);
+        if (visible.length > 0) setActive(visible[0].target.id);
       },
       { rootMargin: "-40% 0px -55% 0px" },
     );
@@ -46,91 +51,176 @@ function useScrolled(threshold = 8): boolean {
   return scrolled;
 }
 
+/** Measures the active link so a single highlight can slide between items. */
+function useSlidingIndicator(active: SectionId) {
+  const listRef = useRef<HTMLUListElement>(null);
+  const linkRefs = useRef(new Map<SectionId, HTMLAnchorElement>());
+  const [rect, setRect] = useState<IndicatorRect | null>(null);
+  const [animate, setAnimate] = useState(false);
+
+  const measure = useCallback(() => {
+    const link = linkRefs.current.get(active);
+    if (link) setRect({ left: link.offsetLeft, width: link.offsetWidth });
+  }, [active]);
+
+  useLayoutEffect(measure, [measure]);
+
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(list);
+    return () => observer.disconnect();
+  }, [measure]);
+
+  // Enable the slide only after the first placement, so the highlight doesn't animate in from the left edge.
+  useEffect(() => {
+    if (rect && !animate) requestAnimationFrame(() => setAnimate(true));
+  }, [rect, animate]);
+
+  const registerLink = (id: SectionId) => (element: HTMLAnchorElement | null) => {
+    if (element) linkRefs.current.set(id, element);
+    else linkRefs.current.delete(id);
+  };
+
+  return { listRef, registerLink, rect, animate };
+}
+
 export default function Header() {
   const active = useActiveSection();
   const scrolled = useScrolled();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { listRef, registerLink, rect, animate } = useSlidingIndicator(active);
 
   useEffect(() => {
     if (!menuOpen) return;
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") setMenuOpen(false);
     };
+    const closeOnDesktop = () => {
+      if (window.matchMedia("(min-width: 48rem)").matches) setMenuOpen(false);
+    };
     window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
+    window.addEventListener("resize", closeOnDesktop);
+    return () => {
+      window.removeEventListener("keydown", closeOnEscape);
+      window.removeEventListener("resize", closeOnDesktop);
+    };
   }, [menuOpen]);
 
-  const linkClass = (id: SectionId) =>
-    `relative rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150 active:bg-brand-100 ${
-      active === id ? "bg-brand-50 text-brand-700" : "text-ink-muted hover:bg-line/50 hover:text-ink"
-    }`;
-
   return (
-    <header
-      className={`sticky top-0 z-40 border-b bg-canvas/90 backdrop-blur-md transition-[border-color,box-shadow] duration-200 ${
-        scrolled ? "border-line shadow-[0_1px_12px_rgb(28_31_29/0.06)]" : "border-transparent"
-      }`}
-    >
-      <div className="page-container flex h-16 items-center justify-between gap-4">
-        <a href="#home" className="group flex items-center gap-2.5 rounded-lg font-semibold tracking-tight text-ink">
-          <span className="flex size-8 items-center justify-center rounded-lg bg-brand-600 text-white transition-transform duration-200 group-hover:rotate-[-8deg] group-active:scale-95">
-            <Recycle className="size-4.5" aria-hidden="true" />
-          </span>
-          SmartWaste
-        </a>
+    <header className="pointer-events-none sticky top-0 z-40 -mb-19 pt-3">
+      <div className="page-container">
+        <div
+          className={`pointer-events-auto rounded-2xl border backdrop-blur-xl backdrop-saturate-150 transition-[background-color,border-color,box-shadow] duration-300 ${
+            scrolled || menuOpen ? "border-line bg-surface/90 shadow-raised" : "border-line/70 bg-surface/70 shadow-card"
+          }`}
+        >
+          <div className="flex h-16 items-center justify-between gap-4 pr-2 pl-3 sm:pr-2.5">
+            <a href="#home" className="group flex items-center gap-2.5 rounded-xl py-1 pr-2">
+              <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.2),0_1px_2px_rgb(20_82_44/0.3)] transition-transform duration-300 group-hover:rotate-[-12deg] group-active:scale-95">
+                <Recycle className="size-[18px]" aria-hidden="true" />
+              </span>
+              <span className="flex flex-col leading-none">
+                <span className="text-[15px] font-semibold tracking-tight text-ink">SmartWaste</span>
+                <span className="mt-1 hidden text-[11px] font-medium text-ink-subtle sm:block">AI waste classification</span>
+              </span>
+            </a>
 
-        <nav aria-label="Main" className="hidden md:block">
-          <ul className="flex items-center gap-1">
-            {NAV_ITEMS.map(({ id, label }) => (
-              <li key={id}>
-                <a href={`#${id}`} className={linkClass(id)} aria-current={active === id ? "location" : undefined}>
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+            <nav aria-label="Main" className="hidden md:block">
+              <ul ref={listRef} className="relative flex items-center rounded-xl border border-line bg-canvas/80 p-1">
+                {rect && (
+                  <span
+                    className={`absolute inset-y-1 left-0 rounded-lg bg-surface shadow-[0_1px_2px_rgb(28_31_29/0.08),0_2px_8px_rgb(28_31_29/0.06)] ring-1 ring-line ${
+                      animate ? "transition-[transform,width] duration-300 ease-[cubic-bezier(0.3,0.7,0.2,1)]" : ""
+                    }`}
+                    style={{ width: rect.width, transform: `translateX(${rect.left}px)` }}
+                    aria-hidden="true"
+                  />
+                )}
+                {NAV_ITEMS.map(({ id, label }) => {
+                  const current = active === id;
+                  return (
+                    <li key={id}>
+                      <a
+                        ref={registerLink(id)}
+                        href={`#${id}`}
+                        aria-current={current ? "location" : undefined}
+                        className={`relative block rounded-lg px-3.5 py-1.5 text-sm font-medium transition-colors duration-150 ${
+                          current ? "text-brand-700" : "text-ink-muted hover:bg-line/50 hover:text-ink active:bg-line"
+                        }`}
+                      >
+                        {label}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
 
-        <div className="flex items-center gap-2">
-          <a href="#classifier" className="btn btn-secondary hidden px-4 py-2 text-sm sm:inline-flex">
-            Try Classifier
-          </a>
-          <button
-            type="button"
-            className="inline-flex size-10 items-center justify-center rounded-lg text-ink transition-colors duration-150 hover:bg-line/60 active:bg-line md:hidden"
-            aria-expanded={menuOpen}
-            aria-controls="mobile-nav"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            onClick={() => setMenuOpen((open) => !open)}
+            <div className="flex items-center gap-1.5">
+              <a href="#classifier" className="group btn btn-primary hidden py-2 pr-3.5 pl-4 text-sm sm:inline-flex">
+                Try Classifier
+                <ArrowRight
+                  className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                  aria-hidden="true"
+                />
+              </a>
+              <button
+                type="button"
+                className="inline-flex size-10 items-center justify-center rounded-xl text-ink transition-colors duration-150 hover:bg-line/60 active:bg-line md:hidden"
+                aria-expanded={menuOpen}
+                aria-controls="mobile-nav"
+                aria-label={menuOpen ? "Close menu" : "Open menu"}
+                onClick={() => setMenuOpen((open) => !open)}
+              >
+                {menuOpen ? <X className="size-5" aria-hidden="true" /> : <Menu className="size-5" aria-hidden="true" />}
+              </button>
+            </div>
+          </div>
+
+          <div
+            className={`grid transition-[grid-template-rows] duration-300 ease-out md:hidden ${
+              menuOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+            }`}
           >
-            {menuOpen ? <X className="size-5" aria-hidden="true" /> : <Menu className="size-5" aria-hidden="true" />}
-          </button>
+            <nav id="mobile-nav" aria-label="Mobile" className="overflow-hidden" inert={!menuOpen}>
+              <ul className="flex flex-col gap-1 border-t border-line p-2">
+                {NAV_ITEMS.map(({ id, label, icon: Icon }) => {
+                  const current = active === id;
+                  return (
+                    <li key={id}>
+                      <a
+                        href={`#${id}`}
+                        aria-current={current ? "location" : undefined}
+                        onClick={() => setMenuOpen(false)}
+                        className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors duration-150 ${
+                          current ? "bg-brand-50 text-brand-800" : "text-ink-muted hover:bg-line/50 hover:text-ink active:bg-line"
+                        }`}
+                      >
+                        <span
+                          className={`flex size-8 items-center justify-center rounded-lg ${
+                            current ? "bg-brand-600 text-white" : "bg-canvas text-ink-subtle ring-1 ring-line"
+                          }`}
+                        >
+                          <Icon className="size-4" aria-hidden="true" />
+                        </span>
+                        {label}
+                      </a>
+                    </li>
+                  );
+                })}
+                <li className="pt-1 sm:hidden">
+                  <a href="#classifier" className="btn btn-primary w-full py-2.5 text-sm" onClick={() => setMenuOpen(false)}>
+                    Try Classifier
+                    <ArrowRight className="size-4" aria-hidden="true" />
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
       </div>
-
-      {menuOpen && (
-        <nav id="mobile-nav" aria-label="Mobile" className="border-t border-line bg-canvas md:hidden">
-          <ul className="page-container flex flex-col gap-1 py-3">
-            {NAV_ITEMS.map(({ id, label }) => (
-              <li key={id}>
-                <a
-                  href={`#${id}`}
-                  className={`block ${linkClass(id)}`}
-                  aria-current={active === id ? "location" : undefined}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {label}
-                </a>
-              </li>
-            ))}
-            <li className="pt-2 sm:hidden">
-              <a href="#classifier" className="btn btn-primary w-full py-2.5 text-sm" onClick={() => setMenuOpen(false)}>
-                Try Classifier
-              </a>
-            </li>
-          </ul>
-        </nav>
-      )}
     </header>
   );
 }
