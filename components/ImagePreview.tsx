@@ -1,78 +1,86 @@
-import { FileImage, LoaderCircle, RefreshCw, X } from "lucide-react";
-import { formatFileSize } from "@/lib/format";
-import type { SelectedImage } from "@/types/prediction";
+import { FileImage, RefreshCw, X } from "lucide-react";
+import { formatFileSize, formatPercent } from "@/lib/format";
+import { WASTE_INFO } from "@/lib/wasteData";
+import type { Prediction, SelectedImage } from "@/types/prediction";
+import CategoryIcon from "./CategoryIcon";
+import { LOW_CONFIDENCE_THRESHOLD } from "./PredictionResult";
 
 interface ImagePreviewProps {
   image: SelectedImage;
   onReplace: () => void;
   onRemove: () => void;
-  onClassify: () => void;
-  showClassify: boolean;
-  canClassify: boolean;
   isClassifying: boolean;
-  classifyHint: string | null;
+  prediction: Prediction | null;
 }
 
-export default function ImagePreview({
-  image,
-  onReplace,
-  onRemove,
-  onClassify,
-  showClassify,
-  canClassify,
-  isClassifying,
-  classifyHint,
-}: ImagePreviewProps) {
+export default function ImagePreview({ image, onReplace, onRemove, isClassifying, prediction }: ImagePreviewProps) {
   const { file, previewUrl, bitmap } = image;
-  const secondaryButton = "btn btn-secondary flex-1 px-4 py-2.5 text-sm sm:flex-none";
+  const toolbarButton = "btn btn-secondary size-9 p-0 text-sm sm:size-auto sm:px-3 sm:py-2";
+  const uncertain = prediction !== null && prediction.confidence < LOW_CONFIDENCE_THRESHOLD;
 
   return (
-    <div>
-      <div className="flex items-center justify-center overflow-hidden rounded-2xl border border-line bg-canvas">
-        <img src={previewUrl} alt={`Preview of ${file.name}`} className="max-h-[26rem] w-full object-contain" />
-      </div>
+    <div className="relative aspect-[4/3] overflow-hidden rounded-[1.25rem] border border-line bg-canvas lg:aspect-auto lg:h-full lg:min-h-[clamp(26rem,calc(100svh-20rem),36rem)]">
+      <span
+        className="bg-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_80%)]"
+        aria-hidden="true"
+      />
+      <img
+        src={previewUrl}
+        alt={`Preview of ${file.name}`}
+        className="absolute inset-0 size-full object-contain p-4 pb-18 drop-shadow-[0_8px_24px_rgb(28_31_29/0.12)] sm:p-8 sm:pb-22"
+      />
 
-      <div className="mt-4 flex items-start gap-3">
-        <FileImage className="mt-0.5 size-5 shrink-0 text-ink-subtle" aria-hidden="true" />
-        <div className="min-w-0">
-          <p className="truncate font-medium text-ink" title={file.name}>
+      {isClassifying && (
+        <div className="pointer-events-none absolute inset-0 bg-brand-600/5" aria-hidden="true">
+          <span className="absolute inset-x-0 h-0.5 bg-brand-500 shadow-[0_0_18px_4px_rgb(47_154_82/0.45)] motion-safe:animate-sweep" />
+        </div>
+      )}
+
+      {prediction && (
+        <span
+          className={`absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold shadow-card motion-safe:animate-fade-up ${
+            uncertain ? "bg-amber-50 text-amber-900 ring-1 ring-amber-200" : "bg-brand-600 text-white"
+          }`}
+        >
+          <CategoryIcon classId={prediction.classId} className="size-3.5" />
+          {uncertain ? `Possibly ${WASTE_INFO[prediction.classId].label}` : WASTE_INFO[prediction.classId].label}
+          <span className="tabular-nums opacity-80">{formatPercent(prediction.confidence)}</span>
+        </span>
+      )}
+
+      <div className="absolute inset-x-3 bottom-3 flex items-center gap-3 rounded-xl border border-line bg-surface/90 p-2 pl-3 shadow-card backdrop-blur-md">
+        <FileImage className="size-5 shrink-0 text-ink-subtle" aria-hidden="true" />
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-medium text-ink" title={file.name}>
             {file.name}
           </p>
-          <p className="text-sm text-ink-muted">
+          <p className="text-xs text-ink-muted">
             {formatFileSize(file.size)} · {bitmap.width} × {bitmap.height} px
           </p>
         </div>
+        <button
+          type="button"
+          onClick={onReplace}
+          disabled={isClassifying}
+          aria-label="Replace Image"
+          title="Replace image"
+          className={toolbarButton}
+        >
+          <RefreshCw className="size-4" aria-hidden="true" />
+          <span className="hidden sm:inline">Replace</span>
+        </button>
+        <button
+          type="button"
+          onClick={onRemove}
+          disabled={isClassifying}
+          aria-label="Remove Image"
+          title="Remove image"
+          className={toolbarButton}
+        >
+          <X className="size-4" aria-hidden="true" />
+          <span className="hidden sm:inline">Remove</span>
+        </button>
       </div>
-
-      <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
-        {showClassify && (
-          <button
-            type="button"
-            onClick={onClassify}
-            disabled={!canClassify || isClassifying}
-            aria-describedby={classifyHint ? "classify-hint" : undefined}
-            className="btn btn-primary px-6 py-3 sm:mr-auto"
-          >
-            {isClassifying && <LoaderCircle className="size-4 motion-safe:animate-spin" aria-hidden="true" />}
-            {isClassifying ? "Analyzing image..." : "Analyze Waste"}
-          </button>
-        )}
-        <div className="flex gap-3">
-          <button type="button" onClick={onReplace} disabled={isClassifying} className={secondaryButton}>
-            <RefreshCw className="size-4" aria-hidden="true" />
-            Replace Image
-          </button>
-          <button type="button" onClick={onRemove} disabled={isClassifying} className={secondaryButton}>
-            <X className="size-4" aria-hidden="true" />
-            Remove Image
-          </button>
-        </div>
-      </div>
-      {showClassify && classifyHint && (
-        <p id="classify-hint" className="mt-3 text-sm text-ink-muted">
-          {classifyHint}
-        </p>
-      )}
     </div>
   );
 }

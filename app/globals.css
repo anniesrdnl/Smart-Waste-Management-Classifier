@@ -25,12 +25,13 @@
 
   --animate-fade-up: fade-up 280ms ease-out both;
   --animate-scan: scan 3.2s ease-in-out infinite;
+  --animate-sweep: sweep 1.6s ease-in-out infinite alternate;
 }
 
 @utility page-container {
   margin-inline: auto;
   width: 100%;
-  max-width: 72rem;
+  max-width: 80rem;
   padding-inline: 1rem;
 
   @media (width >= 40rem) {
@@ -150,6 +151,15 @@
   }
 }
 
+@keyframes sweep {
+  from {
+    top: 0%;
+  }
+  to {
+    top: 100%;
+  }
+}
+
 :root {
   color-scheme: light;
 }
@@ -164,7 +174,7 @@
 }
 
 html {
-  scroll-padding-top: 6rem;
+  scroll-padding-top: 4.5rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {

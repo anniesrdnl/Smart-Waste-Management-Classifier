@@ -13,28 +13,33 @@ export default function WasteGuide({ classId }: { classId: WasteClassId }) {
   const { icon: Icon, className } = RECYCLABILITY_STYLE[info.recyclability];
 
   return (
-    <section aria-labelledby="waste-guide-heading" className="rounded-2xl border border-line bg-surface p-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h4 id="waste-guide-heading" className="font-semibold text-ink">
-          What should you do with it?
-        </h4>
+    <section
+      aria-labelledby="waste-guide-heading"
+      className="grid gap-5 rounded-[1.25rem] border border-line bg-canvas p-5 sm:p-7 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-12"
+    >
+      <div>
         <span
           className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ring-1 ${className}`}
         >
           <Icon className="size-3.5" aria-hidden="true" />
           {info.recyclabilityLabel}
         </span>
+        <h4 id="waste-guide-heading" className="mt-3 text-lg font-semibold text-ink">
+          What should you do with it?
+        </h4>
+        <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">{info.summary}</p>
+        <p className="mt-4 text-xs leading-relaxed text-ink-subtle">{LOCAL_RULES_NOTICE}</p>
       </div>
-      <p className="mt-3 text-sm leading-relaxed text-ink-muted">{info.summary}</p>
-      <ul className="mt-3 space-y-2">
-        {info.guidance.map((tip) => (
-          <li key={tip} className="flex gap-2 text-sm leading-relaxed text-ink">
-            <span className="mt-2 size-1.5 shrink-0 rounded-full bg-brand-500" aria-hidden="true" />
-            {tip}
+      <ol className="divide-y divide-line self-center rounded-xl border border-line bg-surface">
+        {info.guidance.map((tip, index) => (
+          <li key={tip} className="flex gap-3.5 px-4 py-3.5 text-sm leading-relaxed text-ink">
+            <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-50 text-xs font-semibold text-brand-700 ring-1 ring-brand-200">
+              {index + 1}
+            </span>
+            <span className="pt-0.5">{tip}</span>
           </li>
         ))}
-      </ul>
-      <p className="mt-4 border-t border-line pt-3 text-xs leading-relaxed text-ink-subtle">{LOCAL_RULES_NOTICE}</p>
+      </ol>
     </section>
   );
 }

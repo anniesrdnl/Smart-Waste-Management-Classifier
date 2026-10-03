@@ -40,38 +40,46 @@ export default function ImageUploader({ onBrowse, onFileDropped, isProcessing, b
       onDragOver={(event) => event.preventDefault()}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className={`group flex min-h-80 flex-col items-center justify-center rounded-2xl border-2 border-dashed px-6 py-10 text-center transition-[background-color,border-color,transform] duration-200 focus-within:border-brand-300 sm:min-h-96 ${
+      className={`group relative flex h-full min-h-80 flex-col items-center justify-center overflow-hidden rounded-[1.25rem] border-2 border-dashed px-6 py-12 text-center transition-[background-color,border-color] duration-200 focus-within:border-brand-300 lg:min-h-[clamp(26rem,calc(100svh-20rem),36rem)] ${
         isDragging
-          ? "scale-[0.99] border-brand-500 bg-brand-50"
-          : "border-line-strong bg-canvas hover:border-brand-300 hover:bg-brand-50/50 active:bg-brand-50"
+          ? "border-brand-500 bg-brand-50"
+          : "border-line-strong bg-canvas hover:border-brand-300 hover:bg-brand-50/40 active:bg-brand-50"
       } ${isProcessing ? "cursor-wait" : "cursor-pointer"}`}
     >
       <span
-        className={`flex size-14 items-center justify-center rounded-2xl transition-[background-color,color,transform] duration-200 ${
+        className="bg-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]"
+        aria-hidden="true"
+      />
+
+      <span
+        className={`relative flex size-16 items-center justify-center rounded-2xl shadow-card ring-1 transition-[background-color,color,transform,box-shadow] duration-200 ${
           isDragging
-            ? "-translate-y-1 bg-brand-600 text-white"
-            : "bg-brand-100 text-brand-700 group-hover:-translate-y-0.5 group-hover:bg-brand-600 group-hover:text-white"
+            ? "-translate-y-1 bg-brand-600 text-white ring-brand-600"
+            : "bg-surface text-brand-700 ring-line group-hover:-translate-y-1 group-hover:bg-brand-600 group-hover:text-white group-hover:ring-brand-600"
         }`}
       >
         {isProcessing ? (
-          <LoaderCircle className="size-6 motion-safe:animate-spin" aria-hidden="true" />
+          <LoaderCircle className="size-7 motion-safe:animate-spin" aria-hidden="true" />
         ) : (
-          <ImageUp className="size-6" aria-hidden="true" />
+          <ImageUp className="size-7" strokeWidth={1.75} aria-hidden="true" />
         )}
       </span>
-      <p className="mt-5 text-lg font-semibold text-ink">
-        {isProcessing ? "Reading image…" : isDragging ? "Release to upload" : "Drop your image here"}
+
+      <h3 className="relative mt-6 text-xl font-semibold tracking-tight text-ink">
+        {isProcessing ? "Reading image…" : isDragging ? "Release to upload" : "Upload Waste Image"}
+      </h3>
+      <p className="relative mt-2 max-w-sm text-sm leading-relaxed text-ink-muted">
+        Drag and drop a clear photo of a single waste item, or browse your files.
       </p>
-      <p className="my-3 text-sm text-ink-subtle">or</p>
       <button
         ref={browseButtonRef}
         type="button"
         disabled={isProcessing}
-        className="btn btn-primary px-6 py-2.5"
+        className="btn btn-primary relative mt-6 px-6 py-2.5"
       >
         Browse files
       </button>
-      <p className="mt-5 text-xs text-ink-subtle">JPG, JPEG, PNG or WEBP · up to 20 MB</p>
+      <p className="relative mt-4 text-xs text-ink-subtle">JPG, JPEG, PNG or WEBP · up to 20 MB</p>
     </div>
   );
 }
