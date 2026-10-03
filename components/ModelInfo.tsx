@@ -97,7 +97,7 @@ export default function ModelInfo() {
                   ))}
                 </dl>
                 <p className="mt-4 text-xs leading-relaxed text-ink-subtle">
-                  Measured on {metrics.testSamples} unseen test images from the {metadata?.datasetName} dataset
+                  Measured on {metrics.testSamples} unseen test images from {metadata?.datasetName}
                   {metadata?.datasetSplit
                     ? ` (split: ${metadata.datasetSplit.train} train / ${metadata.datasetSplit.validation} validation / ${metadata.datasetSplit.test} test)`
                     : ""}

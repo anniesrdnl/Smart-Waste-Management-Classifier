@@ -1,5 +1,8 @@
 import { Recycle } from "lucide-react";
 
+const DATASET_LINK =
+  "font-medium text-brand-700 underline decoration-brand-300 underline-offset-2 transition-colors duration-150 hover:text-brand-800 hover:decoration-brand-700";
+
 const LINKS = [
   { href: "#classifier", label: "Classifier" },
   { href: "#how-it-works", label: "How It Works" },
@@ -40,16 +43,20 @@ export default function Footer() {
         </div>
         <div className="mt-8 flex flex-col gap-2 border-t border-line pt-6 text-xs leading-relaxed text-ink-subtle sm:flex-row sm:justify-between sm:gap-6">
           <p>
-            Trained on the{" "}
+            Trained on{" "}
+            <a href="https://github.com/garythung/trashnet" className={DATASET_LINK} target="_blank" rel="noopener noreferrer">
+              TrashNet
+            </a>{" "}
+            (Thung &amp; Yang) and{" "}
             <a
-              href="https://github.com/garythung/trashnet"
-              className="font-medium text-brand-700 underline decoration-brand-300 underline-offset-2 transition-colors duration-150 hover:text-brand-800 hover:decoration-brand-700"
+              href="https://archive.ics.uci.edu/dataset/908/realwaste"
+              className={DATASET_LINK}
               target="_blank"
               rel="noopener noreferrer"
             >
-              TrashNet dataset
+              RealWaste
             </a>{" "}
-            by Gary Thung and Mindy Yang.
+            (Single, Iranmanesh &amp; Raad, CC BY 4.0).
           </p>
           <p>Disposal guidance is general — check your local waste authority.</p>
         </div>
