@@ -4,7 +4,7 @@ export type Recyclability = "recyclable" | "conditional" | "residual";
 
 export interface WasteInfo {
   label: string;
-  examples: string;
+  description: string;
   recyclability: Recyclability;
   recyclabilityLabel: string;
   summary: string;
@@ -14,7 +14,7 @@ export interface WasteInfo {
 export const WASTE_INFO: Record<WasteClassId, WasteInfo> = {
   cardboard: {
     label: "Cardboard",
-    examples: "Boxes, cartons, packaging",
+    description: "Corrugated boxes, cartons and thick packaging board.",
     recyclability: "recyclable",
     recyclabilityLabel: "Generally recyclable",
     summary: "Cardboard is generally recyclable when it is clean and dry.",
@@ -26,7 +26,7 @@ export const WASTE_INFO: Record<WasteClassId, WasteInfo> = {
   },
   glass: {
     label: "Glass",
-    examples: "Bottles, jars, containers",
+    description: "Bottles, jars and other glass containers.",
     recyclability: "conditional",
     recyclabilityLabel: "Often recyclable",
     summary: "Glass bottles and jars are often recyclable, depending on the glass type and local facilities.",
@@ -39,7 +39,7 @@ export const WASTE_INFO: Record<WasteClassId, WasteInfo> = {
   },
   metal: {
     label: "Metal",
-    examples: "Cans, tins, foil",
+    description: "Aluminium and steel cans, tins and foil.",
     recyclability: "recyclable",
     recyclabilityLabel: "Commonly recyclable",
     summary: "Metal waste such as aluminium and steel cans is commonly recyclable when cleaned and separated.",
@@ -52,7 +52,7 @@ export const WASTE_INFO: Record<WasteClassId, WasteInfo> = {
   },
   paper: {
     label: "Paper",
-    examples: "Newspaper, office paper, magazines",
+    description: "Newspapers, office paper, magazines and envelopes.",
     recyclability: "recyclable",
     recyclabilityLabel: "Generally recyclable",
     summary: "Paper is generally recyclable when it is clean and free from major contamination.",
@@ -64,7 +64,7 @@ export const WASTE_INFO: Record<WasteClassId, WasteInfo> = {
   },
   plastic: {
     label: "Plastic",
-    examples: "Bottles, containers, packaging",
+    description: "Bottles, tubs, containers and packaging.",
     recyclability: "conditional",
     recyclabilityLabel: "Depends on type",
     summary: "Plastic recyclability depends heavily on the plastic type and on local facilities.",
@@ -77,7 +77,7 @@ export const WASTE_INFO: Record<WasteClassId, WasteInfo> = {
   },
   trash: {
     label: "Trash",
-    examples: "Mixed, soiled or non-recyclable items",
+    description: "Mixed, soiled or non-recyclable items for general waste.",
     recyclability: "residual",
     recyclabilityLabel: "Usually general waste",
     summary:

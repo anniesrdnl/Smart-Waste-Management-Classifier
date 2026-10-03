@@ -13,10 +13,10 @@ export default function WasteGuide({ classId }: { classId: WasteClassId }) {
   const { icon: Icon, className } = RECYCLABILITY_STYLE[info.recyclability];
 
   return (
-    <section aria-labelledby="waste-guide-heading" className="rounded-2xl border border-line bg-canvas p-5">
+    <section aria-labelledby="waste-guide-heading" className="rounded-2xl border border-line bg-surface p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h4 id="waste-guide-heading" className="font-semibold text-ink">
-          Disposal guidance: {info.label}
+          What should you do with it?
         </h4>
         <span
           className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ring-1 ${className}`}

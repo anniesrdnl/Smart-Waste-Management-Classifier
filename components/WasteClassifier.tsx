@@ -164,22 +164,17 @@ export default function WasteClassifier() {
     modelStatus === "ready"
       ? null
       : modelStatus === "error"
-        ? "Classification is unavailable because the model could not be loaded."
-        : "Classification will be available once the model has loaded.";
+        ? "Analysis is unavailable because the model could not be loaded."
+        : "Analysis will be available as soon as the model has loaded.";
 
   return (
-    <section
-      id="classifier"
-      ref={sectionRef}
-      aria-labelledby="classifier-heading"
-      className="py-16 sm:py-24"
-    >
+    <section id="classifier" ref={sectionRef} aria-labelledby="classifier-heading" className="py-16 sm:py-24">
       <div className="page-container">
         <SectionHeading
           id="classifier-heading"
-          eyebrow="Classifier"
-          title="Classify a waste item"
-          description="Upload an existing photo of a single waste item. Review the preview, then run the MobileNetV2 model to see its prediction and the probability for every category."
+          eyebrow="Waste Classifier"
+          title="Identify a waste item in seconds"
+          description="The model runs directly in your browser. Upload an image, review it, then analyze."
         />
 
         <input
@@ -191,91 +186,105 @@ export default function WasteClassifier() {
           aria-label="Choose a waste image to upload"
         />
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
-          <div className="space-y-4 rounded-3xl border border-line bg-surface p-4 shadow-card sm:p-6">
-            {phase.name === "empty" ? (
-              <ImageUploader
-                onBrowse={openFilePicker}
-                onFileDropped={(file) => void handleFile(file)}
-                isProcessing={isDecoding}
-                browseButtonRef={browseButtonRef}
-              />
-            ) : (
-              <ImagePreview
-                image={phase.image}
-                onReplace={openFilePicker}
-                onRemove={reset}
-                onClassify={() => void classify()}
-                showClassify={phase.name !== "result"}
-                canClassify={modelStatus === "ready"}
-                isClassifying={phase.name === "classifying"}
-                classifyHint={classifyHint}
-              />
-            )}
-
-            {error && <ErrorAlert error={error} onDismiss={() => setError(null)} />}
-
-            <p className="flex items-start gap-2 text-xs leading-relaxed text-ink-subtle">
-              <Lock className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
-              Your image is processed locally in your browser for classification and is not uploaded or stored by Smart
-              Waste.
-            </p>
+        <div className="mt-10 rounded-[1.75rem] border border-line bg-surface shadow-raised">
+          <div className="flex flex-col items-start gap-3 border-b border-line px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7 sm:py-5">
+            <div>
+              <h3 className="text-lg font-semibold text-ink">Upload Waste Image</h3>
+              <p className="text-sm text-ink-muted">Upload a clear image of a single waste item for classification.</p>
+            </div>
+            <ModelStatusBadge status={modelStatus} />
           </div>
 
-          <div
-            ref={resultRef}
-            className="rounded-3xl border border-line bg-surface p-5 shadow-card sm:p-6"
-            aria-busy={phase.name === "classifying"}
-          >
-            <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-              <h3 className="text-sm font-semibold tracking-wide text-ink-muted uppercase">Analysis</h3>
-              <ModelStatusBadge status={modelStatus} />
+          <div className="grid gap-6 p-4 sm:p-7 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-8">
+            <div className="space-y-4">
+              {phase.name === "empty" ? (
+                <ImageUploader
+                  onBrowse={openFilePicker}
+                  onFileDropped={(file) => void handleFile(file)}
+                  isProcessing={isDecoding}
+                  browseButtonRef={browseButtonRef}
+                />
+              ) : (
+                <ImagePreview
+                  image={phase.image}
+                  onReplace={openFilePicker}
+                  onRemove={reset}
+                  onClassify={() => void classify()}
+                  showClassify={phase.name !== "result"}
+                  canClassify={modelStatus === "ready"}
+                  isClassifying={phase.name === "classifying"}
+                  classifyHint={classifyHint}
+                />
+              )}
+
+              {error && <ErrorAlert error={error} onDismiss={() => setError(null)} />}
+
+              <p className="flex items-start gap-2 text-xs leading-relaxed text-ink-subtle">
+                <Lock className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
+                Your image is processed locally in your browser and is never uploaded or stored.
+              </p>
             </div>
 
-            {modelError && (
-              <div className="mb-6">
-                <ErrorAlert
-                  error={modelError}
-                  action={
-                    modelError.code === "model-load-failed" ? { label: "Retry loading model", onClick: loadModel } : undefined
-                  }
-                />
-              </div>
-            )}
+            <div
+              ref={resultRef}
+              className="rounded-2xl border border-line bg-canvas p-5 sm:p-6"
+              aria-busy={phase.name === "classifying"}
+              aria-live="polite"
+            >
+              {modelError && (
+                <div className="mb-6">
+                  <ErrorAlert
+                    error={modelError}
+                    action={
+                      modelError.code === "model-load-failed" ? { label: "Retry loading model", onClick: loadModel } : undefined
+                    }
+                  />
+                </div>
+              )}
 
-            {phase.name === "result" ? (
-              <PredictionResult prediction={phase.prediction} onReset={classifyAnother} headingRef={resultHeadingRef} />
-            ) : phase.name === "classifying" ? (
-              <div className="flex min-h-64 flex-col items-center justify-center text-center" role="status">
-                <LoaderCircle className="size-8 text-brand-600 motion-safe:animate-spin" aria-hidden="true" />
-                <p className="mt-4 font-semibold text-ink">Analyzing image...</p>
-                <p className="mt-1 text-sm text-ink-muted">Running MobileNetV2 in your browser.</p>
-              </div>
-            ) : (
-              <div className="flex min-h-64 flex-col items-center justify-center text-center">
-                <span className="flex size-12 items-center justify-center rounded-2xl bg-canvas text-ink-subtle ring-1 ring-line">
-                  <ChartNoAxesColumn className="size-6" aria-hidden="true" />
-                </span>
-                <p className="mt-4 font-semibold text-ink">
-                  {phase.name === "selected" ? "Ready when you are" : "Results will appear here"}
-                </p>
-                <p className="mt-1 max-w-xs text-sm text-ink-muted">
-                  {phase.name === "selected"
-                    ? "Click Classify Waste to analyse the selected image."
-                    : "Upload an image to get started. For the best results, use:"}
-                </p>
-                {phase.name === "empty" && (
-                  <ul className="mt-4 space-y-1.5 text-left text-sm text-ink-muted">
-                    {PHOTO_TIPS.map((tip) => (
-                      <li key={tip} className="flex items-center gap-2">
-                        <span className="size-1.5 rounded-full bg-brand-500" aria-hidden="true" />
-                        {tip}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
+              {phase.name === "result" ? (
+                <div key="result" className="motion-safe:animate-fade-up">
+                  <PredictionResult prediction={phase.prediction} onReset={classifyAnother} headingRef={resultHeadingRef} />
+                </div>
+              ) : phase.name === "classifying" ? (
+                <div
+                  key="classifying"
+                  className="flex min-h-56 flex-col items-center justify-center text-center motion-safe:animate-fade-up lg:min-h-72"
+                  role="status"
+                >
+                  <span className="relative flex size-14 items-center justify-center">
+                    <span className="absolute inset-0 rounded-full border-2 border-brand-100" aria-hidden="true" />
+                    <LoaderCircle className="size-14 text-brand-600 motion-safe:animate-spin" strokeWidth={1.5} aria-hidden="true" />
+                  </span>
+                  <p className="mt-5 font-semibold text-ink">Analyzing image...</p>
+                  <p className="mt-1 text-sm text-ink-muted">The model is examining the image on your device.</p>
+                </div>
+              ) : (
+                <div key="idle" className="flex flex-col justify-center motion-safe:animate-fade-up lg:min-h-72">
+                  <span className="flex size-11 items-center justify-center rounded-xl bg-surface text-ink-subtle ring-1 ring-line">
+                    <ChartNoAxesColumn className="size-5" aria-hidden="true" />
+                  </span>
+                  <p className="mt-4 font-semibold text-ink">
+                    {phase.name === "selected" ? "Ready to analyze" : "Classification Result"}
+                  </p>
+                  <p className="mt-1 text-sm leading-relaxed text-ink-muted">
+                    {phase.name === "selected"
+                      ? "Click Analyze Waste to identify the material in your image."
+                      : "Your result and disposal guidance will appear here. For the most reliable result, use:"}
+                  </p>
+                  {phase.name === "empty" && (
+                    <ul className="mt-4 space-y-2 text-sm text-ink-muted">
+                      {PHOTO_TIPS.map((tip) => (
+                        <li key={tip} className="flex items-center gap-2.5">
+                          <span className="size-1.5 rounded-full bg-brand-500" aria-hidden="true" />
+                          {tip}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

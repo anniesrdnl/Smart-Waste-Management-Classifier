@@ -6,5 +6,4 @@ scikit-learn
 pillow
 onnx
 onnxruntime
-huggingface_hub
 jupyter

@@ -22,6 +22,9 @@
 
   --shadow-card: 0 1px 2px rgb(28 31 29 / 0.04), 0 4px 16px rgb(28 31 29 / 0.05);
   --shadow-raised: 0 2px 4px rgb(28 31 29 / 0.05), 0 12px 32px rgb(28 31 29 / 0.08);
+
+  --animate-fade-up: fade-up 280ms ease-out both;
+  --animate-scan: scan 3.2s ease-in-out infinite;
 }
 
 @utility page-container {
@@ -116,7 +119,34 @@
   &:hover {
     border-color: var(--color-brand-200);
     box-shadow: var(--shadow-raised);
-    transform: translateY(-2px);
+  }
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, rgb(28 31 29 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(28 31 29 / 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scan {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(var(--scan-distance, 120px));
   }
 }
 

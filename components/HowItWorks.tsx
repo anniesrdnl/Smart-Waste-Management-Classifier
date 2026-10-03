@@ -1,51 +1,46 @@
-import { BrainCircuit, ChartBar, ImageUp, SlidersHorizontal, Tags } from "lucide-react";
+import { BrainCircuit, ImageUp, Tags } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 
 const STEPS = [
-  { icon: ImageUp, title: "Upload", text: "Select an existing waste image from your device." },
+  { icon: ImageUp, title: "Upload", text: "Upload a clear photo of the waste item." },
   {
-    icon: SlidersHorizontal,
-    title: "Prepare",
-    text: "The image is resized to 224 × 224 pixels and converted into the exact format used during model training.",
+    icon: BrainCircuit,
+    title: "AI Analysis",
+    text: "The computer vision model analyzes the visual characteristics of the image.",
   },
-  { icon: BrainCircuit, title: "Analyze", text: "MobileNetV2 analyses visual patterns and features such as texture, shape and shine." },
-  { icon: Tags, title: "Classify", text: "The trained neural network determines the most probable of the six waste categories." },
-  { icon: ChartBar, title: "Result", text: "The predicted category, its confidence and the scores for every category are displayed." },
+  {
+    icon: Tags,
+    title: "Classification",
+    text: "The system predicts the waste category and displays disposal guidance.",
+  },
 ];
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" aria-labelledby="how-heading" className="border-y border-line bg-surface py-16 sm:py-24">
+    <section id="how-it-works" aria-labelledby="how-heading" className="border-t border-line py-16 sm:py-24">
       <div className="page-container">
         <SectionHeading
           id="how-heading"
-          eyebrow="How it works"
-          title="From photo to prediction in five steps"
-          description="Everything after the upload happens on your device. The model runs directly in the browser, so the image never leaves your computer or phone."
+          eyebrow="How It Works"
+          title="From photo to guidance in three steps"
+          description="No account and no waiting. The whole process runs in your browser."
         />
-        <ol className="mt-10 grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-5">
+        <ol className="relative mt-12 grid gap-8 md:grid-cols-3 md:gap-6">
+          <span
+            className="absolute top-6 bottom-6 left-6 w-px bg-gradient-to-b from-brand-200 via-brand-300 to-brand-200 md:top-6 md:right-[16.66%] md:bottom-auto md:left-[16.66%] md:h-px md:w-auto md:bg-gradient-to-r"
+            aria-hidden="true"
+          />
           {STEPS.map(({ icon: Icon, title, text }, index) => (
-            <li
-              key={title}
-              className="group card-interactive flex items-start gap-4 rounded-2xl border border-line bg-canvas p-5 hover:bg-surface sm:flex-col sm:gap-0 sm:last:col-span-2 lg:last:col-auto"
-            >
-              <div className="flex shrink-0 items-center justify-between sm:mb-4 sm:w-full">
-                <span className="flex size-10 items-center justify-center rounded-xl bg-brand-100 text-brand-700 transition-colors duration-200 group-hover:bg-brand-600 group-hover:text-white">
-                  <Icon className="size-5" aria-hidden="true" />
-                </span>
-                <span
-                  className="hidden text-sm font-semibold text-ink-subtle tabular-nums transition-colors duration-200 group-hover:text-brand-700 sm:block"
-                  aria-hidden="true"
-                >
+            <li key={title} className="group relative flex gap-5 md:flex-col md:items-center md:gap-0 md:text-center">
+              <span className="relative z-10 flex size-12 shrink-0 items-center justify-center rounded-2xl border border-brand-200 bg-surface text-brand-700 shadow-card transition-colors duration-200 group-hover:border-brand-600 group-hover:bg-brand-600 group-hover:text-white">
+                <Icon className="size-5" aria-hidden="true" />
+              </span>
+              <div className="pt-1 md:mt-5 md:max-w-xs md:pt-0">
+                <p className="text-xs font-semibold tracking-wide text-brand-700 tabular-nums">
                   {String(index + 1).padStart(2, "0")}
-                </span>
-              </div>
-              <div className="sm:w-full">
-                <h3 className="font-semibold text-ink">
-                  <span className="mr-1.5 text-ink-subtle tabular-nums sm:hidden">{String(index + 1).padStart(2, "0")}</span>
-                  {title}
-                </h3>
-                <p className="mt-1 text-sm leading-relaxed text-ink-muted">{text}</p>
+                </p>
+                <h3 className="mt-1 text-lg font-semibold text-ink">{title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">{text}</p>
               </div>
             </li>
           ))}

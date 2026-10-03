@@ -54,7 +54,7 @@ export default function ImagePreview({
             className="btn btn-primary px-6 py-3 sm:mr-auto"
           >
             {isClassifying && <LoaderCircle className="size-4 motion-safe:animate-spin" aria-hidden="true" />}
-            {isClassifying ? "Analyzing image..." : "Classify Waste"}
+            {isClassifying ? "Analyzing image..." : "Analyze Waste"}
           </button>
         )}
         <div className="flex gap-3">

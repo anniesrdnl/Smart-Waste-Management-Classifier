@@ -59,9 +59,8 @@ export default function ImageUploader({ onBrowse, onFileDropped, isProcessing, b
           <ImageUp className="size-6" aria-hidden="true" />
         )}
       </span>
-      <h3 className="mt-5 text-lg font-semibold text-ink">Upload Waste Image</h3>
-      <p className="mt-1 text-ink-muted">
-        {isProcessing ? "Reading image…" : isDragging ? "Release to upload" : "Drag and drop your image here"}
+      <p className="mt-5 text-lg font-semibold text-ink">
+        {isProcessing ? "Reading image…" : isDragging ? "Release to upload" : "Drop your image here"}
       </p>
       <p className="my-3 text-sm text-ink-subtle">or</p>
       <button
@@ -70,7 +69,7 @@ export default function ImageUploader({ onBrowse, onFileDropped, isProcessing, b
         disabled={isProcessing}
         className="btn btn-primary px-6 py-2.5"
       >
-        Browse Files
+        Browse files
       </button>
       <p className="mt-5 text-xs text-ink-subtle">JPG, JPEG, PNG or WEBP · up to 20 MB</p>
     </div>

@@ -1,9 +1,11 @@
 import Categories from "@/components/Categories";
+import EnvironmentalImpact from "@/components/EnvironmentalImpact";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import HowItWorks from "@/components/HowItWorks";
 import ModelInfo from "@/components/ModelInfo";
+import ResponsibleAI from "@/components/ResponsibleAI";
 import WasteClassifier from "@/components/WasteClassifier";
 
 export default function Home() {
@@ -19,9 +21,11 @@ export default function Home() {
       <main>
         <Hero />
         <WasteClassifier />
-        <HowItWorks />
         <Categories />
+        <HowItWorks />
         <ModelInfo />
+        <ResponsibleAI />
+        <EnvironmentalImpact />
       </main>
       <Footer />
     </>

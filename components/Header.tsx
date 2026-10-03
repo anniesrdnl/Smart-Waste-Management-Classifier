@@ -5,7 +5,7 @@ import { Menu, Recycle, X } from "lucide-react";
 
 const NAV_ITEMS = [
   { id: "home", label: "Home" },
-  { id: "classifier", label: "Classifier" },
+  { id: "classifier", label: "Classify Waste" },
   { id: "how-it-works", label: "How It Works" },
   { id: "about", label: "About" },
 ] as const;
@@ -76,7 +76,7 @@ export default function Header() {
           <span className="flex size-8 items-center justify-center rounded-lg bg-brand-600 text-white transition-transform duration-200 group-hover:rotate-[-8deg] group-active:scale-95">
             <Recycle className="size-4.5" aria-hidden="true" />
           </span>
-          Smart Waste
+          SmartWaste
         </a>
 
         <nav aria-label="Main" className="hidden md:block">
@@ -92,8 +92,8 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <a href="#classifier" className="btn btn-primary hidden px-4 py-2 text-sm sm:inline-flex">
-            Classify Waste
+          <a href="#classifier" className="btn btn-secondary hidden px-4 py-2 text-sm sm:inline-flex">
+            Try Classifier
           </a>
           <button
             type="button"
@@ -125,7 +125,7 @@ export default function Header() {
             ))}
             <li className="pt-2 sm:hidden">
               <a href="#classifier" className="btn btn-primary w-full py-2.5 text-sm" onClick={() => setMenuOpen(false)}>
-                Classify Waste
+                Try Classifier
               </a>
             </li>
           </ul>
