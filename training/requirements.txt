@@ -1,0 +1,9 @@
+tensorflow>=2.16,<2.21
+numpy
+pandas
+matplotlib
+scikit-learn
+pillow
+onnx
+onnxruntime
+jupyter

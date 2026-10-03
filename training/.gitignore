@@ -1,0 +1,6 @@
+dataset/
+dataset_rejected/
+trashnet_raw/
+trashnet-dataset-resized.zip
+artifacts/
+.ipynb_checkpoints/

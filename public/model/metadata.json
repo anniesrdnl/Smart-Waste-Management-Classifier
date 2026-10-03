@@ -1,0 +1,80 @@
+{
+  "format_version": 1,
+  "model_name": "smart_waste_mobilenetv2",
+  "model_version": "1.0.0",
+  "created_at": "2026-10-03T00:30:31+00:00",
+  "architecture": "MobileNetV2 (ImageNet) + GlobalAveragePooling + Dropout + Dense(256) + Dropout + Dense(6, softmax)",
+  "model_file": "smart_waste_mobilenetv2.onnx",
+  "input": {
+    "name": "image",
+    "height": 224,
+    "width": 224,
+    "channels": 3,
+    "layout": "NHWC",
+    "color_order": "RGB",
+    "dtype": "float32",
+    "pixel_range": [
+      0,
+      255
+    ],
+    "resize": "bilinear with antialiasing, aspect ratio not preserved"
+  },
+  "preprocessing": {
+    "embedded_in_model": true,
+    "operation": "x / 127.5 - 1 (keras.applications.mobilenet_v2.preprocess_input)"
+  },
+  "output": {
+    "name": "probabilities",
+    "activation": "softmax",
+    "num_classes": 6
+  },
+  "class_names": [
+    "cardboard",
+    "glass",
+    "metal",
+    "paper",
+    "plastic",
+    "trash"
+  ],
+  "class_index": {
+    "0": "cardboard",
+    "1": "glass",
+    "2": "metal",
+    "3": "paper",
+    "4": "plastic",
+    "5": "trash"
+  },
+  "dataset": {
+    "name": "TrashNet",
+    "source": "https://github.com/garythung/trashnet",
+    "seed": 42,
+    "split": {
+      "train": 1766,
+      "validation": 379,
+      "test": 379
+    }
+  },
+  "training": {
+    "head_epochs": 16,
+    "fine_tune_epochs": 17,
+    "fine_tune_from_layer": "block_13_expand",
+    "selected_checkpoint": "fine-tuned",
+    "class_weights_used": true
+  },
+  "metrics": {
+    "test_samples": 379,
+    "test_loss": 0.457829087972641,
+    "test_accuracy": 0.8601583242416382,
+    "macro_precision": 0.8390887149170844,
+    "macro_recall": 0.8254784368875362,
+    "macro_f1": 0.8308193713955672,
+    "weighted_precision": 0.8588246325227585,
+    "weighted_recall": 0.8601583113456465,
+    "weighted_f1": 0.8587956289756545
+  },
+  "onnx_parity": {
+    "images_compared": 379,
+    "max_abs_difference": 1.0907649993896484e-05,
+    "argmax_agreement": 1.0
+  }
+}

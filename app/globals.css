@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  --color-canvas: #fafaf7;
+  --color-surface: #ffffff;
+  --color-ink: #1c1f1d;
+  --color-ink-muted: #565c58;
+  --color-ink-subtle: #7a807c;
+  --color-line: #e6e8e3;
+  --color-line-strong: #d3d7d0;
+
+  --color-brand-50: #eff8f1;
+  --color-brand-100: #d9efde;
+  --color-brand-200: #b4dfbf;
+  --color-brand-300: #84c896;
+  --color-brand-500: #2f9a52;
+  --color-brand-600: #1f7f40;
+  --color-brand-700: #186735;
+  --color-brand-800: #14522c;
+
+  --shadow-card: 0 1px 2px rgb(28 31 29 / 0.04), 0 4px 16px rgb(28 31 29 / 0.05);
+  --shadow-raised: 0 2px 4px rgb(28 31 29 / 0.05), 0 12px 32px rgb(28 31 29 / 0.08);
+}
+
+@utility page-container {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 72rem;
+  padding-inline: 1rem;
+
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+
+  @media (width >= 64rem) {
+    padding-inline: 2rem;
+  }
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-padding-top: 5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-600);
+  outline-offset: 2px;
+}
