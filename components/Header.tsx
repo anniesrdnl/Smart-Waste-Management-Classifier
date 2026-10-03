@@ -33,8 +33,22 @@ function useActiveSection(): SectionId {
   return active;
 }
 
+function useScrolled(threshold = 8): boolean {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > threshold);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, [threshold]);
+
+  return scrolled;
+}
+
 export default function Header() {
   const active = useActiveSection();
+  const scrolled = useScrolled();
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -47,15 +61,19 @@ export default function Header() {
   }, [menuOpen]);
 
   const linkClass = (id: SectionId) =>
-    `rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150 ${
-      active === id ? "text-brand-700 bg-brand-50" : "text-ink-muted hover:text-ink hover:bg-line/60"
+    `relative rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150 active:bg-brand-100 ${
+      active === id ? "bg-brand-50 text-brand-700" : "text-ink-muted hover:bg-line/50 hover:text-ink"
     }`;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-canvas/95 backdrop-blur-sm">
+    <header
+      className={`sticky top-0 z-40 border-b bg-canvas/90 backdrop-blur-md transition-[border-color,box-shadow] duration-200 ${
+        scrolled ? "border-line shadow-[0_1px_12px_rgb(28_31_29/0.06)]" : "border-transparent"
+      }`}
+    >
       <div className="page-container flex h-16 items-center justify-between gap-4">
-        <a href="#home" className="flex items-center gap-2 rounded-lg font-bold text-ink">
-          <span className="flex size-8 items-center justify-center rounded-lg bg-brand-600 text-white">
+        <a href="#home" className="group flex items-center gap-2.5 rounded-lg font-semibold tracking-tight text-ink">
+          <span className="flex size-8 items-center justify-center rounded-lg bg-brand-600 text-white transition-transform duration-200 group-hover:rotate-[-8deg] group-active:scale-95">
             <Recycle className="size-4.5" aria-hidden="true" />
           </span>
           Smart Waste
@@ -74,15 +92,12 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <a
-            href="#classifier"
-            className="hidden rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors duration-150 hover:bg-brand-700 sm:inline-flex"
-          >
+          <a href="#classifier" className="btn btn-primary hidden px-4 py-2 text-sm sm:inline-flex">
             Classify Waste
           </a>
           <button
             type="button"
-            className="inline-flex size-10 items-center justify-center rounded-lg text-ink hover:bg-line/60 md:hidden"
+            className="inline-flex size-10 items-center justify-center rounded-lg text-ink transition-colors duration-150 hover:bg-line/60 active:bg-line md:hidden"
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -109,11 +124,7 @@ export default function Header() {
               </li>
             ))}
             <li className="pt-2 sm:hidden">
-              <a
-                href="#classifier"
-                className="block rounded-lg bg-brand-600 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-brand-700"
-                onClick={() => setMenuOpen(false)}
-              >
+              <a href="#classifier" className="btn btn-primary w-full py-2.5 text-sm" onClick={() => setMenuOpen(false)}>
                 Classify Waste
               </a>
             </li>

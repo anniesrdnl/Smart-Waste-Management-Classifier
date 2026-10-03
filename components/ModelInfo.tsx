@@ -59,9 +59,9 @@ export default function ModelInfo() {
 
         <dl className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
           {MODEL_FACTS.map(({ label, value }) => (
-            <div key={label} className="rounded-2xl border border-line bg-canvas p-5">
-              <dt className="text-xs font-semibold tracking-wide text-ink-subtle uppercase">{label}</dt>
-              <dd className="mt-2 font-semibold text-ink sm:text-lg">{value}</dd>
+            <div key={label} className="card-interactive rounded-2xl border border-line bg-canvas p-4 hover:bg-surface sm:p-5">
+              <dt className="text-xs font-medium tracking-wide text-ink-subtle uppercase">{label}</dt>
+              <dd className="mt-2 text-[0.95rem] leading-snug font-semibold text-balance text-ink sm:text-lg">{value}</dd>
             </div>
           ))}
         </dl>
@@ -71,8 +71,8 @@ export default function ModelInfo() {
             <h3 className="font-semibold text-ink">Training pipeline</h3>
             <ol className="mt-4 space-y-3">
               {TRAINING_STEPS.map((step, index) => (
-                <li key={step} className="flex gap-3 text-sm leading-relaxed text-ink-muted">
-                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-100 text-xs font-bold text-brand-800">
+                <li key={step} className="group flex gap-3 text-sm leading-relaxed text-ink-muted">
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-100 text-xs font-semibold text-brand-800 transition-colors duration-200 group-hover:bg-brand-600 group-hover:text-white">
                     {index + 1}
                   </span>
                   {step}
@@ -87,7 +87,10 @@ export default function ModelInfo() {
               <>
                 <dl className="mt-4 grid grid-cols-2 gap-3">
                   {metricRows.map(({ label, value }) => (
-                    <div key={label} className="rounded-xl bg-surface p-4 ring-1 ring-line">
+                    <div
+                      key={label}
+                      className="rounded-xl bg-surface p-4 ring-1 ring-line transition-shadow duration-200 hover:shadow-card hover:ring-brand-200"
+                    >
                       <dt className="text-xs text-ink-muted">{label}</dt>
                       <dd className="mt-1 text-xl font-bold text-ink tabular-nums">{value}</dd>
                     </div>

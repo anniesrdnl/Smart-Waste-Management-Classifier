@@ -40,13 +40,19 @@ export default function ImageUploader({ onBrowse, onFileDropped, isProcessing, b
       onDragOver={(event) => event.preventDefault()}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className={`flex min-h-80 flex-col items-center justify-center rounded-2xl border-2 border-dashed px-6 py-10 text-center transition-colors duration-150 sm:min-h-96 ${
+      className={`group flex min-h-80 flex-col items-center justify-center rounded-2xl border-2 border-dashed px-6 py-10 text-center transition-[background-color,border-color,transform] duration-200 focus-within:border-brand-300 sm:min-h-96 ${
         isDragging
-          ? "border-brand-500 bg-brand-50"
-          : "border-line-strong bg-canvas hover:border-brand-300 hover:bg-brand-50/40"
+          ? "scale-[0.99] border-brand-500 bg-brand-50"
+          : "border-line-strong bg-canvas hover:border-brand-300 hover:bg-brand-50/50 active:bg-brand-50"
       } ${isProcessing ? "cursor-wait" : "cursor-pointer"}`}
     >
-      <span className="flex size-14 items-center justify-center rounded-2xl bg-brand-100 text-brand-700">
+      <span
+        className={`flex size-14 items-center justify-center rounded-2xl transition-[background-color,color,transform] duration-200 ${
+          isDragging
+            ? "-translate-y-1 bg-brand-600 text-white"
+            : "bg-brand-100 text-brand-700 group-hover:-translate-y-0.5 group-hover:bg-brand-600 group-hover:text-white"
+        }`}
+      >
         {isProcessing ? (
           <LoaderCircle className="size-6 motion-safe:animate-spin" aria-hidden="true" />
         ) : (
@@ -62,7 +68,7 @@ export default function ImageUploader({ onBrowse, onFileDropped, isProcessing, b
         ref={browseButtonRef}
         type="button"
         disabled={isProcessing}
-        className="rounded-xl bg-brand-600 px-6 py-2.5 font-semibold text-white shadow-sm transition-colors duration-150 hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-60"
+        className="btn btn-primary px-6 py-2.5"
       >
         Browse Files
       </button>

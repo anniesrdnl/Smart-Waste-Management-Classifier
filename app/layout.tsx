@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
 
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
 });
 
@@ -19,7 +19,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${jakarta.variable} antialiased`}>
+    <html lang="en" className={`${geist.variable} antialiased`}>
       <body className="min-h-screen font-sans">{children}</body>
     </html>
   );

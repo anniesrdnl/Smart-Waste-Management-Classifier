@@ -24,8 +24,7 @@ export default function ImagePreview({
   classifyHint,
 }: ImagePreviewProps) {
   const { file, previewUrl, bitmap } = image;
-  const secondaryButton =
-    "inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-line-strong bg-surface px-4 py-2.5 text-sm font-semibold text-ink transition-colors duration-150 hover:border-ink-subtle hover:bg-canvas disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none";
+  const secondaryButton = "btn btn-secondary flex-1 px-4 py-2.5 text-sm sm:flex-none";
 
   return (
     <div>
@@ -52,7 +51,7 @@ export default function ImagePreview({
             onClick={onClassify}
             disabled={!canClassify || isClassifying}
             aria-describedby={classifyHint ? "classify-hint" : undefined}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 font-semibold text-white shadow-sm transition-colors duration-150 hover:bg-brand-700 disabled:cursor-not-allowed disabled:bg-ink-subtle sm:mr-auto"
+            className="btn btn-primary px-6 py-3 sm:mr-auto"
           >
             {isClassifying && <LoaderCircle className="size-4 motion-safe:animate-spin" aria-hidden="true" />}
             {isClassifying ? "Analyzing image..." : "Classify Waste"}

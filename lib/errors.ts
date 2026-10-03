@@ -76,10 +76,18 @@ export class ClassifierError extends Error {
   }
 }
 
+const USER_INPUT_ERRORS: ReadonlySet<ClassifierErrorCode> = new Set([
+  "no-file",
+  "empty-file",
+  "unsupported-format",
+  "file-too-large",
+  "decode-failed",
+  "heic-unsupported",
+]);
+
 export function toClassifierError(error: unknown, fallback: ClassifierErrorCode): ClassifierError {
   const classified = error instanceof ClassifierError ? error : new ClassifierError(fallback, undefined, { cause: error });
-  if (classified.cause !== undefined || classified.message !== ERROR_MESSAGES[classified.code].message) {
-    console.error(classified);
-  }
+  const hasDetail = classified.cause !== undefined || classified.message !== ERROR_MESSAGES[classified.code].message;
+  if (hasDetail && !USER_INPUT_ERRORS.has(classified.code)) console.error(classified);
   return classified;
 }

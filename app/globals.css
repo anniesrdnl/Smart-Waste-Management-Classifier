@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
 
   --color-canvas: #fafaf7;
   --color-surface: #ffffff;
@@ -39,8 +39,98 @@
   }
 }
 
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    box-shadow 150ms ease,
+    transform 100ms ease;
+
+  &:active:not(:disabled) {
+    transform: translateY(1px) scale(0.985);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+@utility btn-primary {
+  background-color: var(--color-brand-600);
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgb(20 82 44 / 0.25);
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-brand-700);
+    box-shadow: 0 6px 16px -4px rgb(20 82 44 / 0.35);
+  }
+
+  &:active:not(:disabled) {
+    background-color: var(--color-brand-800);
+    box-shadow: 0 1px 2px rgb(20 82 44 / 0.25);
+  }
+
+  &:disabled {
+    background-color: var(--color-ink-subtle);
+    box-shadow: none;
+    opacity: 0.7;
+  }
+}
+
+@utility btn-secondary {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  border: 1px solid var(--color-line-strong);
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-brand-300);
+    background-color: var(--color-brand-50);
+    color: var(--color-brand-800);
+  }
+
+  &:active:not(:disabled) {
+    background-color: var(--color-brand-100);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+@utility card-interactive {
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease,
+    background-color 200ms ease;
+
+  &:hover {
+    border-color: var(--color-brand-200);
+    box-shadow: var(--shadow-raised);
+    transform: translateY(-2px);
+  }
+}
+
 :root {
   color-scheme: light;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
 
 html {
@@ -61,4 +151,9 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-brand-600);
   outline-offset: 2px;
+}
+
+::selection {
+  background: var(--color-brand-200);
+  color: var(--color-brand-800);
 }

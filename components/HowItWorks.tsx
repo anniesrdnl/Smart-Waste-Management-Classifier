@@ -23,23 +23,26 @@ export default function HowItWorks() {
           title="From photo to prediction in five steps"
           description="Everything after the upload happens on your device. The model runs directly in the browser, so the image never leaves your computer or phone."
         />
-        <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <ol className="mt-10 grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-5">
           {STEPS.map(({ icon: Icon, title, text }, index) => (
             <li
               key={title}
-              className="flex gap-4 rounded-2xl border border-line bg-canvas p-5 sm:flex-col sm:gap-0 lg:last:col-auto sm:last:col-span-2"
+              className="group card-interactive flex items-start gap-4 rounded-2xl border border-line bg-canvas p-5 hover:bg-surface sm:flex-col sm:gap-0 sm:last:col-span-2 lg:last:col-auto"
             >
-              <div className="flex shrink-0 items-center gap-3 sm:justify-between">
-                <span className="flex size-10 items-center justify-center rounded-xl bg-brand-100 text-brand-700">
+              <div className="flex shrink-0 items-center justify-between sm:mb-4 sm:w-full">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-brand-100 text-brand-700 transition-colors duration-200 group-hover:bg-brand-600 group-hover:text-white">
                   <Icon className="size-5" aria-hidden="true" />
                 </span>
-                <span className="hidden text-sm font-bold text-ink-subtle tabular-nums sm:block" aria-hidden="true">
+                <span
+                  className="hidden text-sm font-semibold text-ink-subtle tabular-nums transition-colors duration-200 group-hover:text-brand-700 sm:block"
+                  aria-hidden="true"
+                >
                   {String(index + 1).padStart(2, "0")}
                 </span>
               </div>
-              <div className="sm:mt-4">
+              <div className="sm:w-full">
                 <h3 className="font-semibold text-ink">
-                  <span className="sm:hidden">{String(index + 1).padStart(2, "0")} </span>
+                  <span className="mr-1.5 text-ink-subtle tabular-nums sm:hidden">{String(index + 1).padStart(2, "0")}</span>
                   {title}
                 </h3>
                 <p className="mt-1 text-sm leading-relaxed text-ink-muted">{text}</p>

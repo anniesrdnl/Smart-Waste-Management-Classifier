@@ -39,7 +39,7 @@ export default function ErrorAlert({ error, onDismiss, action }: ErrorAlertProps
           <button
             type="button"
             onClick={action.onClick}
-            className={`mt-3 rounded-lg border bg-white px-3 py-1.5 text-sm font-semibold ${tone.button}`}
+            className={`mt-3 rounded-lg border bg-white px-3 py-1.5 text-sm font-semibold transition-colors duration-150 active:scale-[0.98] ${tone.button}`}
           >
             {action.label}
           </button>
@@ -50,7 +50,7 @@ export default function ErrorAlert({ error, onDismiss, action }: ErrorAlertProps
           type="button"
           onClick={onDismiss}
           aria-label="Dismiss message"
-          className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${tone.dismiss}`}
+          className={`flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors duration-150 ${tone.dismiss}`}
         >
           <X className="size-4" aria-hidden="true" />
         </button>

@@ -49,7 +49,7 @@ export default function PredictionResult({ prediction, onReset, headingRef }: Pr
 
       <div>
         <h4 className="mb-3 text-sm font-semibold text-ink">Prediction Confidence</h4>
-        <ul className="space-y-2.5">
+        <ul className="-mx-2 space-y-0.5">
           {prediction.probabilities.map((entry, index) => (
             <li key={entry.classId}>
               <ConfidenceBar entry={entry} highlighted={index === 0} />
@@ -66,9 +66,9 @@ export default function PredictionResult({ prediction, onReset, headingRef }: Pr
       <button
         type="button"
         onClick={onReset}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 font-semibold text-white shadow-sm transition-colors duration-150 hover:bg-brand-700"
+        className="group btn btn-primary w-full px-6 py-3"
       >
-        <RotateCcw className="size-4" aria-hidden="true" />
+        <RotateCcw className="size-4 transition-transform duration-300 group-hover:-rotate-90" aria-hidden="true" />
         Classify Another Image
       </button>
     </div>

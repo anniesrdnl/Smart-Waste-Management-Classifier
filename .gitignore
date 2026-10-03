@@ -42,3 +42,5 @@ next-env.d.ts
 
 # generated ONNX Runtime Web assets (copied from node_modules by scripts/copy-ort-assets.mjs)
 /public/ort/
+
+.vercel
