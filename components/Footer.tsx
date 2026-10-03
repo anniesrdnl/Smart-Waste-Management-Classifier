@@ -13,7 +13,7 @@ const LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-line bg-canvas">
+    <footer className="bg-surface">
       <div className="page-container py-10 sm:py-12">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-sm">

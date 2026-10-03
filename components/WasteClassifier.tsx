@@ -12,7 +12,6 @@ import ImageUploader from "./ImageUploader";
 import ModelStatusBadge from "./ModelStatusBadge";
 import PredictionResult from "./PredictionResult";
 import ResultPlaceholder from "./ResultPlaceholder";
-import SectionHeading from "./SectionHeading";
 import WasteGuide from "./WasteGuide";
 
 type Phase =
@@ -163,24 +162,8 @@ export default function WasteClassifier() {
         : "Analysis will be available as soon as the model has loaded.";
 
   return (
-    <section id="classifier" ref={sectionRef} aria-labelledby="classifier-heading" className="pt-12 pb-16 sm:pt-14 sm:pb-20">
+    <section id="classifier" ref={sectionRef} aria-labelledby="classifier-heading" className="py-12 sm:py-16">
       <div className="page-container">
-        <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between xl:gap-10">
-          <SectionHeading
-            id="classifier-heading"
-            eyebrow="Waste Classifier"
-            title="Identify a waste item in seconds"
-            description="The model runs directly in your browser. Upload an image, review it, then analyze."
-          />
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 xl:flex-col xl:items-end xl:pb-1">
-            <ModelStatusBadge status={modelStatus} />
-            <p className="flex items-start gap-2 text-xs leading-relaxed text-ink-subtle xl:text-right">
-              <Lock className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
-              Your image is processed locally in your browser and is never uploaded or stored.
-            </p>
-          </div>
-        </div>
-
         <input
           ref={inputRef}
           type="file"
@@ -190,62 +173,83 @@ export default function WasteClassifier() {
           aria-label="Choose a waste image to upload"
         />
 
-        <div className="mt-7 grid gap-2 rounded-[1.75rem] border border-line bg-surface p-2 shadow-raised sm:gap-2.5 sm:p-2.5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-          <div className="flex flex-col gap-2">
-            <div className="flex-1">
-              {phase.name === "empty" ? (
-                <ImageUploader
-                  onBrowse={openFilePicker}
-                  onFileDropped={(file) => void handleFile(file)}
-                  isProcessing={isDecoding}
-                  browseButtonRef={browseButtonRef}
-                />
-              ) : (
-                <ImagePreview
-                  image={phase.image}
-                  onReplace={openFilePicker}
-                  onRemove={reset}
-                  isClassifying={phase.name === "classifying"}
-                  prediction={phase.name === "result" ? phase.prediction : null}
-                />
-              )}
+        <div className="overflow-hidden rounded-3xl border border-line bg-surface shadow-raised">
+          <div className="flex flex-col gap-4 border-b border-line px-5 py-5 sm:px-8 sm:py-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+            <div>
+              <p className="text-xs font-semibold tracking-wide text-brand-700 uppercase">Waste Classifier</p>
+              <h2 id="classifier-heading" className="mt-1.5 text-2xl font-bold tracking-tight text-ink sm:text-[1.75rem]">
+                Upload Waste Image
+              </h2>
+              <p className="mt-1 text-sm leading-relaxed text-ink-muted sm:text-base">
+                Upload a clear image of a single waste item for classification.
+              </p>
             </div>
-            {error && <ErrorAlert error={error} onDismiss={() => setError(null)} />}
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 lg:justify-end">
+              <p className="flex items-center gap-1.5 text-xs text-ink-subtle">
+                <Lock className="size-3.5 shrink-0" aria-hidden="true" />
+                Processed in your browser, never uploaded
+              </p>
+              <ModelStatusBadge status={modelStatus} />
+            </div>
           </div>
 
-          <div
-            ref={resultRef}
-            className="@container flex flex-col rounded-[1.25rem] border border-line bg-canvas p-5 sm:p-7"
-            aria-busy={phase.name === "classifying"}
-            aria-live="polite"
-          >
-            {modelError && (
-              <div className="mb-6">
-                <ErrorAlert
-                  error={modelError}
-                  action={
-                    modelError.code === "model-load-failed" ? { label: "Retry loading model", onClick: loadModel } : undefined
-                  }
-                />
+          <div className="grid lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+            <div className="flex flex-col gap-3 p-3 sm:p-5">
+              <div className="flex-1">
+                {phase.name === "empty" ? (
+                  <ImageUploader
+                    onBrowse={openFilePicker}
+                    onFileDropped={(file) => void handleFile(file)}
+                    isProcessing={isDecoding}
+                    browseButtonRef={browseButtonRef}
+                  />
+                ) : (
+                  <ImagePreview
+                    image={phase.image}
+                    onReplace={openFilePicker}
+                    onRemove={reset}
+                    isClassifying={phase.name === "classifying"}
+                    prediction={phase.name === "result" ? phase.prediction : null}
+                  />
+                )}
               </div>
-            )}
+              {error && <ErrorAlert error={error} onDismiss={() => setError(null)} />}
+            </div>
 
-            <div key={phase.name === "result" ? "result" : "idle"} className="flex-1 motion-safe:animate-fade-up">
-              {phase.name === "result" ? (
-                <PredictionResult prediction={phase.prediction} onReset={classifyAnother} headingRef={resultHeadingRef} />
-              ) : (
-                <ResultPlaceholder
-                  state={phase.name}
-                  onClassify={() => void classify()}
-                  canClassify={modelStatus === "ready"}
-                  classifyHint={classifyHint}
-                />
+            <div
+              ref={resultRef}
+              className="@container flex scroll-mt-20 flex-col border-t border-line bg-canvas p-5 sm:p-8 lg:border-t-0 lg:border-l"
+              aria-busy={phase.name === "classifying"}
+              aria-live="polite"
+            >
+              {modelError && (
+                <div className="mb-6">
+                  <ErrorAlert
+                    error={modelError}
+                    action={
+                      modelError.code === "model-load-failed" ? { label: "Retry loading model", onClick: loadModel } : undefined
+                    }
+                  />
+                </div>
               )}
+
+              <div key={phase.name === "result" ? "result" : "idle"} className="flex-1 motion-safe:animate-fade-up">
+                {phase.name === "result" ? (
+                  <PredictionResult prediction={phase.prediction} onReset={classifyAnother} headingRef={resultHeadingRef} />
+                ) : (
+                  <ResultPlaceholder
+                    state={phase.name}
+                    onClassify={() => void classify()}
+                    canClassify={modelStatus === "ready"}
+                    classifyHint={classifyHint}
+                  />
+                )}
+              </div>
             </div>
           </div>
 
           {phase.name === "result" && (
-            <div className="@container motion-safe:animate-fade-up lg:col-span-2">
+            <div className="@container border-t border-line motion-safe:animate-fade-up">
               <WasteGuide classId={phase.prediction.classId} />
             </div>
           )}

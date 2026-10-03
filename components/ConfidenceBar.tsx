@@ -19,7 +19,7 @@ export default function ConfidenceBar({ entry, highlighted }: ConfidenceBarProps
           className={`h-full rounded-full motion-safe:transition-[width] motion-safe:duration-500 motion-safe:ease-out ${
             highlighted ? "bg-brand-600" : "bg-ink-subtle/50 group-hover:bg-ink-subtle/80"
           }`}
-          style={{ width: percent }}
+          style={{ width: `${entry.probability * 100}%` }}
         />
       </div>
       <span className={`text-right text-sm tabular-nums ${highlighted ? "font-semibold text-ink" : "text-ink-muted"}`}>

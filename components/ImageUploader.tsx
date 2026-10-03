@@ -40,7 +40,7 @@ export default function ImageUploader({ onBrowse, onFileDropped, isProcessing, b
       onDragOver={(event) => event.preventDefault()}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className={`group relative flex h-full min-h-80 flex-col items-center justify-center overflow-hidden rounded-[1.25rem] border-2 border-dashed px-6 py-12 text-center transition-[background-color,border-color] duration-200 focus-within:border-brand-300 lg:min-h-[clamp(26rem,calc(100svh-20rem),36rem)] ${
+      className={`group relative flex h-full min-h-80 flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed px-6 py-12 text-center transition-[background-color,border-color] duration-200 focus-within:border-brand-300 lg:min-h-[clamp(26rem,calc(100svh-22rem),34rem)] ${
         isDragging
           ? "border-brand-500 bg-brand-50"
           : "border-line-strong bg-canvas hover:border-brand-300 hover:bg-brand-50/40 active:bg-brand-50"
@@ -66,20 +66,36 @@ export default function ImageUploader({ onBrowse, onFileDropped, isProcessing, b
       </span>
 
       <h3 className="relative mt-6 text-xl font-semibold tracking-tight text-ink">
-        {isProcessing ? "Reading image…" : isDragging ? "Release to upload" : "Upload Waste Image"}
+        {isProcessing ? (
+          "Reading image…"
+        ) : isDragging ? (
+          "Release to upload"
+        ) : (
+          <>
+            <span className="pointer-coarse:hidden">Drop your image here</span>
+            <span className="hidden pointer-coarse:inline">Choose a photo to classify</span>
+          </>
+        )}
       </h3>
-      <p className="relative mt-2 max-w-sm text-sm leading-relaxed text-ink-muted">
-        Drag and drop a clear photo of a single waste item, or browse your files.
+      <p
+        className="relative mt-4 flex w-44 items-center gap-3 text-xs font-medium tracking-wide text-ink-subtle uppercase pointer-coarse:hidden"
+        aria-hidden="true"
+      >
+        <span className="h-px flex-1 bg-line-strong" />
+        or
+        <span className="h-px flex-1 bg-line-strong" />
       </p>
       <button
         ref={browseButtonRef}
         type="button"
         disabled={isProcessing}
-        className="btn btn-primary relative mt-6 px-6 py-2.5"
+        className="btn btn-primary relative mt-4 px-6 py-2.5 pointer-coarse:mt-6"
       >
         Browse files
       </button>
-      <p className="relative mt-4 text-xs text-ink-subtle">JPG, JPEG, PNG or WEBP · up to 20 MB</p>
+      <p className="relative mt-4 text-xs text-balance text-ink-subtle">
+        Supported formats: JPG, PNG or WEBP · up to 20&nbsp;MB
+      </p>
     </div>
   );
 }

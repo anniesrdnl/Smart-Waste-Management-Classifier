@@ -15,7 +15,7 @@ export default function WasteGuide({ classId }: { classId: WasteClassId }) {
   return (
     <section
       aria-labelledby="waste-guide-heading"
-      className="grid gap-5 rounded-[1.25rem] border border-line bg-canvas p-5 sm:p-7 @3xl:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] @3xl:gap-12"
+      className="grid gap-6 p-5 sm:p-8 @4xl:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] @4xl:gap-12"
     >
       <div>
         <span
@@ -24,16 +24,19 @@ export default function WasteGuide({ classId }: { classId: WasteClassId }) {
           <Icon className="size-3.5" aria-hidden="true" />
           {info.recyclabilityLabel}
         </span>
-        <h4 id="waste-guide-heading" className="mt-3 text-lg font-semibold text-ink">
+        <h3 id="waste-guide-heading" className="mt-3 text-lg font-semibold text-ink">
           What should you do with it?
-        </h4>
+        </h3>
         <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">{info.summary}</p>
         <p className="mt-4 text-xs leading-relaxed text-ink-subtle">{LOCAL_RULES_NOTICE}</p>
       </div>
-      <ol className="divide-y divide-line self-center rounded-xl border border-line bg-surface">
+      <ol className="grid content-start gap-3 @2xl:grid-cols-2">
         {info.guidance.map((tip, index) => (
-          <li key={tip} className="flex gap-3.5 px-4 py-3.5 text-sm leading-relaxed text-ink">
-            <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-50 text-xs font-semibold text-brand-700 ring-1 ring-brand-200">
+          <li
+            key={tip}
+            className="flex gap-3.5 rounded-xl border border-line bg-canvas p-4 text-sm leading-relaxed text-ink"
+          >
+            <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-semibold text-brand-700 ring-1 ring-brand-200">
               {index + 1}
             </span>
             <span className="pt-0.5">{tip}</span>

@@ -19,7 +19,7 @@ export default function ImagePreview({ image, onReplace, onRemove, isClassifying
   const uncertain = prediction !== null && prediction.confidence < LOW_CONFIDENCE_THRESHOLD;
 
   return (
-    <div className="relative aspect-[4/3] overflow-hidden rounded-[1.25rem] border border-line bg-canvas lg:aspect-auto lg:h-full lg:min-h-[clamp(26rem,calc(100svh-20rem),36rem)]">
+    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-line bg-canvas lg:aspect-auto lg:h-full lg:min-h-[clamp(26rem,calc(100svh-22rem),34rem)]">
       <span
         className="bg-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_80%)]"
         aria-hidden="true"

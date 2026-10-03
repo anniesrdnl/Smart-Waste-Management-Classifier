@@ -84,7 +84,9 @@ export default function ResultPlaceholder({ state, onClassify, canClassify, clas
       )}
 
       <ul
-        className="mt-5 space-y-1 rounded-xl border border-dashed border-line-strong bg-surface/60 p-3 sm:p-4"
+        className={`mt-5 space-y-1 rounded-xl border border-dashed border-line-strong bg-surface/60 p-3 sm:block sm:p-4 ${
+          state === "empty" ? "hidden" : ""
+        }`}
         aria-hidden="true"
       >
         {WASTE_CLASS_IDS.map((id, index) => (

@@ -31,7 +31,7 @@ type MetadataState = { status: "loading" } | { status: "loaded"; metadata: Model
 
 function DetailRow({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="grid gap-1 py-3 sm:grid-cols-[11rem_1fr] sm:gap-4">
+    <div className="grid gap-1 py-3.5 sm:grid-cols-[11rem_1fr] sm:gap-4 lg:grid-cols-[14rem_1fr] lg:gap-8">
       <dt className="text-sm font-medium text-ink">{label}</dt>
       <dd className="text-sm leading-relaxed text-ink-muted">{children}</dd>
     </div>
@@ -63,7 +63,7 @@ export default function ModelInfo() {
     : [];
 
   return (
-    <section id="about" aria-labelledby="about-heading" className="border-t border-line bg-surface py-16 sm:py-24">
+    <section id="about" aria-labelledby="about-heading" className="border-t border-line bg-surface pt-16 pb-6 sm:pt-20 lg:pt-24">
       <div className="page-container">
         <SectionHeading
           id="about-heading"
@@ -72,9 +72,9 @@ export default function ModelInfo() {
           description="SmartWaste uses computer vision and transfer learning to recognise common waste materials. Here's what that means in practice."
         />
 
-        <ul className="mt-10 grid gap-3 sm:gap-4 md:grid-cols-3">
+        <ul className="mt-10 grid gap-3 sm:gap-4 md:grid-cols-3 lg:mt-12">
           {HIGHLIGHTS.map(({ icon: Icon, title, text }) => (
-            <li key={title} className="group card-interactive rounded-2xl border border-line bg-canvas p-5 hover:bg-surface">
+            <li key={title} className="group card-interactive rounded-2xl border border-line bg-canvas p-5 hover:bg-surface lg:p-6">
               <span className="flex size-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700 transition-colors duration-200 group-hover:bg-brand-600 group-hover:text-white">
                 <Icon className="size-5" aria-hidden="true" />
               </span>

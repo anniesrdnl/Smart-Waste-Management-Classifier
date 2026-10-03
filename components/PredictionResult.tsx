@@ -71,7 +71,8 @@ export default function PredictionResult({ prediction, onReset, headingRef }: Pr
           ))}
         </ul>
         <p className="mt-2 px-2 text-xs leading-relaxed text-ink-subtle">
-          Scores show how strongly the model favours each category. They are not a guarantee. Computed on your device in{" "}
+          Scores show how strongly the model favours each category. They are not a guarantee, and the model always picks
+          one of these six, even for images that show none of them. Computed on your device in{" "}
           {Math.round(prediction.inferenceMs)} ms.
         </p>
       </div>

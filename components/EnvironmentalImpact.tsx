@@ -1,5 +1,4 @@
 import { Lightbulb, Recycle, Sprout } from "lucide-react";
-import SectionHeading from "./SectionHeading";
 
 const BENEFITS = [
   {
@@ -21,27 +20,26 @@ const BENEFITS = [
 
 export default function EnvironmentalImpact() {
   return (
-    <section aria-labelledby="impact-heading" className="border-t border-line py-16 sm:py-24">
-      <div className="page-container grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
-        <SectionHeading
-          id="impact-heading"
-          eyebrow="Why It Matters"
-          title="Better sorting starts with knowing what you hold"
-          description="Recycling works best when materials are separated correctly. Identifying an item before you throw it away is a small step that supports more responsible waste habits."
-        />
-        <ul className="grid gap-3 sm:gap-4">
+    <section aria-labelledby="impact-heading" className="bg-ink py-16 text-white sm:py-20 lg:py-24">
+      <div className="page-container grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
+        <div className="max-w-md">
+          <p className="text-sm font-semibold tracking-wide text-brand-300 uppercase">Why It Matters</p>
+          <h2 id="impact-heading" className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl lg:text-[2.125rem]">
+            Better sorting starts with knowing what you hold
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-white/70">
+            Recycling works best when materials are separated correctly. Identifying an item before you throw it away is
+            a small step that supports more responsible waste habits.
+          </p>
+        </div>
+        <ul className="grid gap-px self-end overflow-hidden rounded-2xl bg-white/10 ring-1 ring-white/10 sm:grid-cols-3">
           {BENEFITS.map(({ icon: Icon, title, text }) => (
-            <li
-              key={title}
-              className="group card-interactive flex gap-4 rounded-2xl border border-line bg-surface p-5"
-            >
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 transition-colors duration-200 group-hover:bg-brand-600 group-hover:text-white">
+            <li key={title} className="group bg-ink p-6 transition-colors duration-200 hover:bg-[#232724] lg:p-7">
+              <span className="flex size-10 items-center justify-center rounded-xl bg-white/5 text-brand-300 ring-1 ring-white/10 transition-colors duration-200 group-hover:bg-brand-600 group-hover:text-white group-hover:ring-brand-600">
                 <Icon className="size-5" aria-hidden="true" />
               </span>
-              <div>
-                <h3 className="font-semibold text-ink">{title}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-ink-muted">{text}</p>
-              </div>
+              <h3 className="mt-5 font-semibold">{title}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-white/65">{text}</p>
             </li>
           ))}
         </ul>
