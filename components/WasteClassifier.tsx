@@ -165,16 +165,16 @@ export default function WasteClassifier() {
   return (
     <section id="classifier" ref={sectionRef} aria-labelledby="classifier-heading" className="pt-12 pb-16 sm:pt-14 sm:pb-20">
       <div className="page-container">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+        <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between xl:gap-10">
           <SectionHeading
             id="classifier-heading"
             eyebrow="Waste Classifier"
             title="Identify a waste item in seconds"
             description="The model runs directly in your browser. Upload an image, review it, then analyze."
           />
-          <div className="flex flex-col items-start gap-2 lg:items-end lg:pb-1">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 xl:flex-col xl:items-end xl:pb-1">
             <ModelStatusBadge status={modelStatus} />
-            <p className="flex items-start gap-2 text-xs leading-relaxed text-ink-subtle lg:text-right">
+            <p className="flex items-start gap-2 text-xs leading-relaxed text-ink-subtle xl:text-right">
               <Lock className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
               Your image is processed locally in your browser and is never uploaded or stored.
             </p>
@@ -215,7 +215,7 @@ export default function WasteClassifier() {
 
           <div
             ref={resultRef}
-            className="flex flex-col rounded-[1.25rem] border border-line bg-canvas p-5 sm:p-7"
+            className="@container flex flex-col rounded-[1.25rem] border border-line bg-canvas p-5 sm:p-7"
             aria-busy={phase.name === "classifying"}
             aria-live="polite"
           >
@@ -245,7 +245,7 @@ export default function WasteClassifier() {
           </div>
 
           {phase.name === "result" && (
-            <div className="motion-safe:animate-fade-up lg:col-span-2">
+            <div className="@container motion-safe:animate-fade-up lg:col-span-2">
               <WasteGuide classId={phase.prediction.classId} />
             </div>
           )}

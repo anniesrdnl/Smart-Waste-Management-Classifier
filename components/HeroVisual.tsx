@@ -49,7 +49,7 @@ export default function HeroVisual() {
       </div>
 
       <figcaption className="sr-only">The six waste categories. Select one to learn how to handle it.</figcaption>
-      <ul className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-6" onMouseLeave={() => setActive(DEFAULT_CATEGORY)}>
+      <ul className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-6 md:grid-cols-3 xl:grid-cols-6" onMouseLeave={() => setActive(DEFAULT_CATEGORY)}>
         {WASTE_CLASS_IDS.map((id) => {
           const selected = id === active;
           return (

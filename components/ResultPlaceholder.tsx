@@ -88,7 +88,7 @@ export default function ResultPlaceholder({ state, onClassify, canClassify, clas
         aria-hidden="true"
       >
         {WASTE_CLASS_IDS.map((id, index) => (
-          <li key={id} className="grid grid-cols-[1.25rem_5.5rem_1fr_2.5rem] items-center gap-3 px-1 py-0.5 sm:grid-cols-[1.25rem_6rem_1fr_2.5rem]">
+          <li key={id} className="grid grid-cols-[1.25rem_5.5rem_1fr_2.5rem] items-center gap-3 px-1 py-0.5 @sm:grid-cols-[1.25rem_6rem_1fr_2.5rem]">
             <CategoryIcon classId={id} className="size-4 text-ink-subtle" />
             <span className="text-sm text-ink-subtle">{WASTE_INFO[id].label}</span>
             <span className="h-2 overflow-hidden rounded-full bg-line">
@@ -106,7 +106,7 @@ export default function ResultPlaceholder({ state, onClassify, canClassify, clas
 
       <div className="mt-auto pt-5">
         <p className="text-xs font-semibold text-ink-muted">For the most reliable result</p>
-        <ul className="mt-2.5 grid gap-x-4 gap-y-2 sm:grid-cols-2">
+        <ul className="mt-2.5 grid gap-x-4 gap-y-2 @[32rem]:grid-cols-2">
           {PHOTO_TIPS.map((tip) => (
             <li key={tip} className="flex items-center gap-2 text-sm text-ink-muted">
               <span className="flex size-4 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-700">

@@ -41,6 +41,10 @@
   @media (width >= 64rem) {
     padding-inline: 2rem;
   }
+
+  @media (width >= 120rem) {
+    max-width: 88rem;
+  }
 }
 
 @utility btn {

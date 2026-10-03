@@ -98,7 +98,7 @@ export default function Header() {
       if (event.key === "Escape") setMenuOpen(false);
     };
     const closeOnDesktop = () => {
-      if (window.matchMedia("(min-width: 48rem)").matches) setMenuOpen(false);
+      if (window.matchMedia("(min-width: 64rem)").matches) setMenuOpen(false);
     };
     window.addEventListener("keydown", closeOnEscape);
     window.addEventListener("resize", closeOnDesktop);
@@ -127,7 +127,7 @@ export default function Header() {
               </span>
             </a>
 
-            <nav aria-label="Main" className="hidden md:block">
+            <nav aria-label="Main" className="hidden lg:block">
               <ul ref={listRef} className="relative flex items-center rounded-xl border border-line bg-canvas/80 p-1">
                 {rect && (
                   <span
@@ -168,7 +168,7 @@ export default function Header() {
               </a>
               <button
                 type="button"
-                className="inline-flex size-10 items-center justify-center rounded-xl text-ink transition-colors duration-150 hover:bg-line/60 active:bg-line md:hidden"
+                className="inline-flex size-10 items-center justify-center rounded-xl text-ink transition-colors duration-150 hover:bg-line/60 active:bg-line lg:hidden"
                 aria-expanded={menuOpen}
                 aria-controls="mobile-nav"
                 aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -180,7 +180,7 @@ export default function Header() {
           </div>
 
           <div
-            className={`grid transition-[grid-template-rows] duration-300 ease-out md:hidden ${
+            className={`grid transition-[grid-template-rows] duration-300 ease-out lg:hidden ${
               menuOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
             }`}
           >

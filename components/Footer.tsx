@@ -15,7 +15,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-line bg-canvas">
       <div className="page-container py-10 sm:py-12">
-        <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-sm">
             <a href="#home" className="group inline-flex items-center gap-2 rounded-lg font-semibold text-ink">
               <span className="flex size-7 items-center justify-center rounded-lg bg-brand-600 text-white transition-transform duration-200 group-hover:rotate-[-8deg]">
@@ -30,7 +30,7 @@ export default function Footer() {
             </p>
           </div>
           <nav aria-label="Footer">
-            <ul className="flex flex-wrap gap-1 text-sm">
+            <ul className="-mx-3 flex flex-wrap gap-1 text-sm lg:mx-0 lg:justify-end">
               {LINKS.map(({ href, label, external }) => (
                 <li key={href}>
                   <a

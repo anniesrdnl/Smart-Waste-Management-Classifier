@@ -15,7 +15,7 @@ export default function WasteGuide({ classId }: { classId: WasteClassId }) {
   return (
     <section
       aria-labelledby="waste-guide-heading"
-      className="grid gap-5 rounded-[1.25rem] border border-line bg-canvas p-5 sm:p-7 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-12"
+      className="grid gap-5 rounded-[1.25rem] border border-line bg-canvas p-5 sm:p-7 @3xl:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] @3xl:gap-12"
     >
       <div>
         <span

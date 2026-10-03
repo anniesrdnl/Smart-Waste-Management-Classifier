@@ -27,7 +27,7 @@ export default function PredictionResult({ prediction, onReset, headingRef }: Pr
             <h3
               ref={headingRef}
               tabIndex={-1}
-              className="mt-2 text-3xl font-bold tracking-tight text-ink focus:outline-none sm:text-4xl"
+              className="mt-2 text-3xl font-bold tracking-tight text-ink focus:outline-none @sm:text-4xl"
             >
               {uncertain ? `Possibly ${info.label}` : info.label}
             </h3>
@@ -76,7 +76,7 @@ export default function PredictionResult({ prediction, onReset, headingRef }: Pr
         </p>
       </div>
 
-      <div className="mt-auto flex flex-col gap-2.5 sm:flex-row">
+      <div className="mt-auto flex flex-col gap-2.5 @[30rem]:flex-row">
         <button type="button" onClick={onReset} className="group btn btn-primary flex-1 px-5 py-3">
           <RotateCcw className="size-4 transition-transform duration-300 group-hover:-rotate-90" aria-hidden="true" />
           Classify Another
