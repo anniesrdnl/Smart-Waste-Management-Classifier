@@ -17,15 +17,14 @@ export default function Footer() {
       <div className="page-container py-10 sm:py-12">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-sm">
-            <a href="#home" className="group inline-flex items-center gap-2 rounded-lg font-semibold text-ink">
+            <a href="#home" className="group inline-flex items-center rounded-lg">
               <Image
                 src="/logo.png"
-                alt=""
+                alt="SmartWaste home"
                 width={48}
                 height={32}
                 className="h-8 w-12 object-contain transition-transform duration-200 group-hover:scale-105"
               />
-              SmartWaste
             </a>
             <p className="mt-1 text-sm font-medium text-ink-muted">Smart Waste Management System</p>
             <p className="mt-3 text-sm leading-relaxed text-ink-muted">

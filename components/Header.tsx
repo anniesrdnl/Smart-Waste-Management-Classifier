@@ -121,16 +121,15 @@ export default function Header() {
       }`}
     >
       <div className="page-container grid h-16 grid-cols-[1fr_auto] items-center gap-6 lg:grid-cols-[1fr_auto_1fr]">
-        <a href="#home" className="group flex items-center gap-2.5 justify-self-start rounded-lg py-1 pr-1">
+        <a href="#home" className="group flex items-center justify-self-start rounded-lg py-1">
           <Image
             src="/logo.png"
-            alt=""
+            alt="SmartWaste home"
             width={60}
             height={40}
             preload
             className="h-10 w-[60px] object-contain transition-transform duration-300 group-hover:scale-105 group-active:scale-95"
           />
-          <span className="text-[15px] font-semibold tracking-tight text-ink">SmartWaste</span>
         </a>
 
         <nav aria-label="Main" className="hidden h-full lg:block">
