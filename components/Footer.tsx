@@ -1,4 +1,4 @@
-import { Recycle } from "lucide-react";
+import Image from "next/image";
 
 const DATASET_LINK =
   "font-medium text-brand-700 underline decoration-brand-300 underline-offset-2 transition-colors duration-150 hover:text-brand-800 hover:decoration-brand-700";
@@ -18,9 +18,13 @@ export default function Footer() {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-sm">
             <a href="#home" className="group inline-flex items-center gap-2 rounded-lg font-semibold text-ink">
-              <span className="flex size-7 items-center justify-center rounded-lg bg-brand-600 text-white transition-transform duration-200 group-hover:rotate-[-8deg]">
-                <Recycle className="size-4" aria-hidden="true" />
-              </span>
+              <Image
+                src="/logo.png"
+                alt=""
+                width={48}
+                height={32}
+                className="h-8 w-12 object-contain transition-transform duration-200 group-hover:scale-105"
+              />
               SmartWaste
             </a>
             <p className="mt-1 text-sm font-medium text-ink-muted">Smart Waste Management System</p>

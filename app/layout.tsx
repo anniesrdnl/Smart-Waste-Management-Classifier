@@ -8,7 +8,7 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "SmartWaste — AI-Powered Waste Classification",
+  title: "Smart Waste Management Classifier",
   description:
     "Upload a photo of a waste item and SmartWaste identifies it as cardboard, glass, metal, paper, plastic or trash using computer vision, then explains how to handle it.",
 };

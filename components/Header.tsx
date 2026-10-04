@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ArrowRight, CloudUpload, House, Info, ListChecks, Menu, Recycle, X, type LucideIcon } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, CloudUpload, House, Info, ListChecks, Menu, X, type LucideIcon } from "lucide-react";
 
 const NAV_ITEMS: readonly { id: string; label: string; icon: LucideIcon }[] = [
   { id: "home", label: "Home", icon: House },
@@ -121,9 +122,14 @@ export default function Header() {
     >
       <div className="page-container grid h-16 grid-cols-[1fr_auto] items-center gap-6 lg:grid-cols-[1fr_auto_1fr]">
         <a href="#home" className="group flex items-center gap-2.5 justify-self-start rounded-lg py-1 pr-1">
-          <span className="flex size-8 items-center justify-center rounded-lg bg-brand-600 text-white transition-transform duration-300 group-hover:rotate-[-12deg] group-active:scale-95">
-            <Recycle className="size-4" aria-hidden="true" />
-          </span>
+          <Image
+            src="/logo.png"
+            alt=""
+            width={60}
+            height={40}
+            preload
+            className="h-10 w-[60px] object-contain transition-transform duration-300 group-hover:scale-105 group-active:scale-95"
+          />
           <span className="text-[15px] font-semibold tracking-tight text-ink">SmartWaste</span>
         </a>
 
