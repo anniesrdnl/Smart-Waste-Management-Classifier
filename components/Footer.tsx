@@ -64,7 +64,16 @@ export default function Footer() {
             >
               RealWaste
             </a>{" "}
-            (Single, Iranmanesh &amp; Raad, CC BY 4.0)
+            (Single, Iranmanesh &amp; Raad, CC BY 4.0) ·{" "}
+            <a
+              href="https://huggingface.co/datasets/steveharianto/waste-garbage-management-dataset"
+              className={DATASET_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Garbage Dataset
+            </a>{" "}
+            (Kunwar, MIT)
           </p>
         </div>
       </div>

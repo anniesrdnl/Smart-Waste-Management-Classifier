@@ -32,21 +32,23 @@ The browser reproduces the training pipeline's preprocessing exactly: EXIF-aware
 
 ## Dataset
 
-The model is trained on two public datasets, mapped to six shared classes:
+The model is trained on three public datasets, mapped to six shared classes. Counts are after cleaning:
 
-| Class | [TrashNet](https://github.com/garythung/trashnet) | [RealWaste](https://archive.ics.uci.edu/dataset/908/realwaste) | Total |
-|---|---:|---:|---:|
-| Cardboard | 403 | 461 | 864 |
-| Glass | 501 | 420 | 921 |
-| Metal | 409 | 790 | 1,199 |
-| Paper | 594 | 500 | 1,094 |
-| Plastic | 480 | 921 | 1,401 |
-| Trash | 137 | 495 | 632 |
-| **Total** | **2,524** | **3,587** | **6,111** |
+| Class | [TrashNet](https://github.com/garythung/trashnet) | [RealWaste](https://archive.ics.uci.edu/dataset/908/realwaste) | [Garbage Dataset](https://huggingface.co/datasets/steveharianto/waste-garbage-management-dataset) | Total |
+|---|---:|---:|---:|---:|
+| Cardboard | 403 | 461 | 946 | 1,810 |
+| Glass | 501 | 420 | 966 | 1,887 |
+| Metal | 409 | 790 | 597 | 1,796 |
+| Paper | 589 | 500 | 870 | 1,959 |
+| Plastic | 480 | 921 | 926 | 2,327 |
+| Trash | 137 | 495 | 802 | 1,434 |
+| **Total** | **2,519** | **3,587** | **5,107** | **11,213** |
 
-- **TrashNet** contains single objects on a plain white background. Three byte-identical duplicates are removed.
+- **TrashNet** contains single objects on a plain white background.
 - **RealWaste** contains items photographed at a landfill, adding cluttered, real-world conditions. Its *Miscellaneous Trash* class maps to *trash*. *Food Organics*, *Vegetation* and *Textile Trash* have no matching class and are excluded.
-- The images are split **70 / 15 / 15** into train (4,277), validation (917) and test (917). The split is stratified by class and source, uses a fixed seed (`42`), and is checked for overlap by both file name and image content.
+- The **Garbage Dataset** (MIT licence) adds varied web and phone photos, the kind people upload to the app. It already contains most of TrashNet, so those 2,523 copies are detected with a perceptual hash and skipped. Up to 1,000 of the remaining photos per class are sampled with a fixed seed so no single source dominates a class. *Biological*, *Battery*, *Shoes* and *Clothes* are excluded.
+- Cleaning removes 3 byte-identical duplicates and 319 near-duplicates (the same picture re-saved or resized), so no image can appear in both the training and test sets.
+- The images are split **70 / 15 / 15** into train (7,849), validation (1,682) and test (1,682). The split is stratified by class and source, uses a fixed seed (`42`), and is checked for overlap by both file name and image content.
 
 ## Model
 
@@ -57,26 +59,28 @@ The model is trained on two public datasets, mapped to six shared classes:
 | Stage 1 | Frozen base, head trained with Adam (1e-3) |
 | Stage 2 | Fine-tuning from `block_13_expand` with Adam (1e-5) |
 | Regularisation | Data augmentation (flip, rotation, zoom, translation, contrast, brightness), dropout, L2, class weights, early stopping |
-| Export | ONNX (opset 17), verified against Keras on all 917 test images (max difference < 1e-5, 100% top-1 agreement) |
+| Export | ONNX (opset 17), verified against Keras on all 1,682 test images (max difference < 2e-5, 100% top-1 agreement) |
 
 ## Results
 
-Evaluated once on the held-out test set (917 images):
+Evaluated once on the held-out test set (1,682 images), model version 1.1.0:
 
 | Accuracy | Macro precision | Macro recall | Macro F1 |
 |---:|---:|---:|---:|
-| **84.4%** | 84.7% | 83.8% | 84.0% |
+| **88.3%** | 88.7% | 88.2% | 88.4% |
 
 | Class | Precision | Recall | F1 | Test images |
 |---|---:|---:|---:|---:|
-| Cardboard | 0.855 | 0.815 | 0.835 | 130 |
-| Glass | 0.767 | 0.884 | 0.822 | 138 |
-| Metal | 0.877 | 0.872 | 0.875 | 180 |
-| Paper | 0.841 | 0.902 | 0.871 | 164 |
-| Plastic | 0.855 | 0.814 | 0.834 | 210 |
-| Trash | 0.886 | 0.737 | 0.805 | 95 |
+| Cardboard | 0.911 | 0.867 | 0.889 | 271 |
+| Glass | 0.891 | 0.898 | 0.894 | 283 |
+| Metal | 0.869 | 0.911 | 0.890 | 270 |
+| Paper | 0.865 | 0.935 | 0.899 | 294 |
+| Plastic | 0.858 | 0.845 | 0.851 | 349 |
+| Trash | 0.928 | 0.837 | 0.880 | 215 |
 
-Accuracy is similar on both sources: **83.9%** on the TrashNet test images and **84.8%** on the RealWaste test images. A model trained on TrashNet alone reached only 47.0% on the same RealWaste images. Adding RealWaste was what made the model work on everyday photos.
+By source: **94.7%** on Garbage Dataset test images, **83.6%** on TrashNet and **82.5%** on RealWaste.
+
+Adding the Garbage Dataset is what made the model reliable on web and phone photos. On the same 767 unseen Garbage Dataset images, the previous two-dataset model (1.0.0) scored 59.5% and this model scores 94.7%. On the 142 TrashNet and RealWaste test images unseen by both models, the two are within three images of each other (81.7% vs 79.6%).
 
 <p align="center">
   <img src="docs/confusion_matrix.png" alt="Confusion matrix" width="100%">
@@ -87,7 +91,8 @@ Training curves are available in [`docs/training_curves.png`](docs/training_curv
 ### Limitations
 
 - The model only knows six categories. Every image is assigned to one of them, even if it shows something else.
-- The most common errors are plastic predicted as glass, metal as glass, and cardboard as paper.
+- The most common errors are cardboard predicted as paper, plastic as glass, and glass as plastic.
+- Scenes unlike any training photo, such as industrial metal stock (pipes, beams, bars) or overflowing bins, can still be misclassified. The app marks low-confidence results as uncertain.
 - Photos with several items, heavy clutter or poor lighting can be misclassified, sometimes with high confidence.
 - Disposal guidance is general. Recycling rules vary by location.
 
@@ -152,4 +157,5 @@ Next.js · React · TypeScript · Tailwind CSS · TensorFlow / Keras · ONNX · 
 
 - **TrashNet** — G. Thung and M. Yang, *Classification of Trash for Recyclability Status*, Stanford CS229, 2016.
 - **RealWaste** — S. Single, S. Iranmanesh and R. Raad, *RealWaste: A Novel Real-Life Data Set for Landfill Waste Classification Using Deep Learning*, Information 14(12), 2023. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- **Garbage Dataset** — S. Kunwar, *Garbage Dataset* (10 classes), via the [Hugging Face mirror](https://huggingface.co/datasets/steveharianto/waste-garbage-management-dataset). Licensed under MIT.
 - **MobileNetV2** — M. Sandler et al., *MobileNetV2: Inverted Residuals and Linear Bottlenecks*, CVPR 2018.
