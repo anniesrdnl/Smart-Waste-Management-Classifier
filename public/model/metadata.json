@@ -1,8 +1,8 @@
 {
   "format_version": 1,
   "model_name": "smart_waste_mobilenetv2",
-  "model_version": "1.0.0",
-  "created_at": "2026-10-03T05:37:22+00:00",
+  "model_version": "1.1.0",
+  "created_at": "2026-10-06T13:55:12+00:00",
   "architecture": "MobileNetV2 (ImageNet) + GlobalAveragePooling + Dropout + Dense(256) + Dropout + Dense(6, softmax)",
   "model_file": "smart_waste_mobilenetv2.onnx",
   "input": {
@@ -45,55 +45,63 @@
     "5": "trash"
   },
   "dataset": {
-    "name": "TrashNet + RealWaste",
+    "name": "TrashNet + RealWaste + Garbage Dataset",
     "sources": {
       "trashnet": "https://github.com/garythung/trashnet",
-      "realwaste": "https://archive.ics.uci.edu/dataset/908/realwaste (CC BY 4.0)"
+      "realwaste": "https://archive.ics.uci.edu/dataset/908/realwaste (CC BY 4.0)",
+      "garbage": "https://huggingface.co/datasets/steveharianto/waste-garbage-management-dataset (MIT)"
     },
     "seed": 42,
     "split": {
-      "train": 4277,
-      "validation": 917,
-      "test": 917
+      "train": 7849,
+      "validation": 1682,
+      "test": 1682
     }
   },
   "training": {
     "head_epochs": 25,
-    "fine_tune_epochs": 12,
+    "fine_tune_epochs": 11,
     "fine_tune_from_layer": "block_13_expand",
     "selected_checkpoint": "fine-tuned",
     "class_weights_used": true
   },
   "metrics": {
-    "test_samples": 917,
-    "test_loss": 0.5368592143058777,
-    "test_accuracy": 0.8440567255020142,
-    "macro_precision": 0.8468690532508192,
-    "macro_recall": 0.8375386087600744,
-    "macro_f1": 0.8400297632220126,
-    "weighted_precision": 0.8468148590860698,
-    "weighted_recall": 0.8440567066521265,
-    "weighted_f1": 0.8437284451381151,
+    "test_samples": 1682,
+    "test_loss": 0.4238561987876892,
+    "test_accuracy": 0.88287752866745,
+    "macro_precision": 0.8869186331964801,
+    "macro_recall": 0.8822753237922969,
+    "macro_f1": 0.8837978088337187,
+    "weighted_precision": 0.8839333445737771,
+    "weighted_recall": 0.8828775267538644,
+    "weighted_f1": 0.8826895638799915,
     "by_source": {
       "trashnet": {
-        "test_images": 379,
-        "accuracy": 0.8390501319261213,
-        "macro_precision": 0.8401481797459559,
-        "macro_recall": 0.8139822684563889,
-        "macro_f1": 0.8225503043314816
+        "test_images": 377,
+        "accuracy": 0.8355437665782494,
+        "macro_precision": 0.811990634067247,
+        "macro_recall": 0.7606705225557685,
+        "macro_f1": 0.7622915105083825
       },
       "realwaste": {
         "test_images": 538,
-        "accuracy": 0.8475836431226765,
-        "macro_precision": 0.8515772200782824,
-        "macro_recall": 0.8450093206103436,
-        "macro_f1": 0.8442341286793006
+        "accuracy": 0.8252788104089219,
+        "macro_precision": 0.8310500537478736,
+        "macro_recall": 0.821923319007718,
+        "macro_f1": 0.8234240067112001
+      },
+      "garbage": {
+        "test_images": 767,
+        "accuracy": 0.9465449804432855,
+        "macro_precision": 0.9455274683514641,
+        "macro_recall": 0.9472200712885147,
+        "macro_f1": 0.9462806101451983
       }
     }
   },
   "onnx_parity": {
-    "images_compared": 917,
-    "max_abs_difference": 8.940696716308594e-06,
+    "images_compared": 1682,
+    "max_abs_difference": 1.1265277862548828e-05,
     "argmax_agreement": 1.0
   }
 }
