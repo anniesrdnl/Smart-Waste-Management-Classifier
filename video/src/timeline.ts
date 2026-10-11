@@ -25,75 +25,67 @@ export const LABEL: Record<ClassId, string> = {
   trash: "Trash",
 };
 
-export type PhotoId = "plastic" | "cardboard" | "glass" | "metal" | "paper" | "trash" | "water" | "bins";
+export type PhotoId = "plastic" | "cardboard" | "glass" | "metal" | "paper" | "trash" | "water";
 
 export interface Sample {
   photo: PhotoId;
   cls: ClassId;
   file: string;
   size: string;
-  /** Real photo in public/ (omit to draw the illustration). */
-  src?: string;
-  /** Pixel size of the real photo, for the preview aspect ratio. */
-  dims?: [number, number];
+  /** Photo in public/. */
+  src: string;
+  /** Pixel size of the photo, for the preview aspect ratio. */
+  dims: [number, number];
   /** Probabilities in descending order, sum = 100. */
   probs: [ClassId, number][];
   ms: number;
-  /** true = produced by running public/model/*.onnx on this exact image; false = illustrative. */
-  real: boolean;
 }
 
 /*
- * Photos with `real: true` were run through the repo's ONNX model using the app's own preprocessing
- * (exact resampler from lib/preprocess.ts); the metal result matches the screenshot in docs/.
+ * Every confidence below was produced by running public/model/smart_waste_mobilenetv2.onnx on that exact photo with
+ * the app's own resampler (lib/preprocess.ts). The metal result matches docs/screenshot-classifier.png.
+ * Plastic and trash photos come from TrashNet (MIT); the others were supplied by the project owner.
  */
 export const SAMPLES: Record<PhotoId, Sample> = {
   plastic: {
-    photo: "plastic", cls: "plastic", file: "plastic_bottle.jpg", size: "96.2 KB · 800 × 800 px", ms: 41, real: false,
-    probs: [["plastic", 98.7], ["glass", 0.62], ["trash", 0.41], ["metal", 0.17], ["paper", 0.06], ["cardboard", 0.04]],
+    photo: "plastic", cls: "plastic", file: "plastic_bottle.jpg", size: "16.1 KB · 512 × 384 px", ms: 41,
+    src: "samples/plastic_bottle.jpg", dims: [512, 384],
+    probs: [["plastic", 99.94], ["glass", 0.06], ["trash", 0.0], ["metal", 0.0], ["cardboard", 0.0], ["paper", 0.0]],
   },
   cardboard: {
-    photo: "cardboard", cls: "cardboard", file: "cardboard_boxes.jpg", size: "16.3 KB · 447 × 447 px", ms: 38, real: true,
+    photo: "cardboard", cls: "cardboard", file: "cardboard_boxes.jpg", size: "16.3 KB · 447 × 447 px", ms: 38,
     src: "samples/cardboard_boxes.jpg", dims: [447, 447],
     probs: [["cardboard", 99.49], ["paper", 0.5], ["trash", 0.01], ["plastic", 0.0], ["metal", 0.0], ["glass", 0.0]],
   },
   glass: {
-    photo: "glass", cls: "glass", file: "glass_bottles.jpg", size: "19.9 KB · 600 × 400 px", ms: 44, real: true,
+    photo: "glass", cls: "glass", file: "glass_bottles.jpg", size: "19.9 KB · 600 × 400 px", ms: 44,
     src: "samples/glass_bottles.jpg", dims: [600, 400],
     probs: [["glass", 98.94], ["plastic", 1.03], ["metal", 0.02], ["paper", 0.01], ["trash", 0.0], ["cardboard", 0.0]],
   },
   metal: {
-    photo: "metal", cls: "metal", file: "metal_parts.jpg", size: "74.7 KB · 800 × 800 px", ms: 47, real: true,
+    photo: "metal", cls: "metal", file: "metal_parts.jpg", size: "74.7 KB · 800 × 800 px", ms: 47,
     src: "samples/metal_parts.jpg", dims: [800, 800],
     probs: [["metal", 91.25], ["trash", 8.39], ["plastic", 0.21], ["paper", 0.11], ["glass", 0.03], ["cardboard", 0.02]],
   },
   paper: {
-    photo: "paper", cls: "paper", file: "paper_cards.jpg", size: "23.9 KB · 335 × 597 px", ms: 36, real: true,
+    photo: "paper", cls: "paper", file: "paper_cards.jpg", size: "23.9 KB · 335 × 597 px", ms: 36,
     src: "samples/paper_cards.jpg", dims: [335, 597],
     probs: [["paper", 99.18], ["trash", 0.68], ["cardboard", 0.11], ["metal", 0.01], ["plastic", 0.01], ["glass", 0.01]],
   },
-  // Illustrated stand-in for "general waste" (illustrative numbers).
   trash: {
-    photo: "trash", cls: "trash", file: "trash_bag.jpg", size: "102.8 KB · 800 × 800 px", ms: 40, real: false,
-    probs: [["trash", 89.5], ["plastic", 4.8], ["paper", 2.6], ["metal", 1.5], ["cardboard", 1.0], ["glass", 0.6]],
-  },
-  // Real photo of overflowing bins. The real model calls this PLASTIC, not trash.
-  bins: {
-    photo: "bins", cls: "plastic", file: "trash_bins.jpg", size: "55.9 KB · 510 × 601 px", ms: 41, real: true,
-    src: "samples/trash_bins.jpg", dims: [510, 601],
-    probs: [["plastic", 93.33], ["trash", 2.94], ["cardboard", 2.21], ["paper", 1.32], ["glass", 0.19], ["metal", 0.01]],
+    photo: "trash", cls: "trash", file: "trash_wrapper.jpg", size: "17.7 KB · 512 × 384 px", ms: 40,
+    src: "samples/trash_wrapper.jpg", dims: [512, 384],
+    probs: [["trash", 95.95], ["cardboard", 1.69], ["paper", 1.54], ["plastic", 0.62], ["metal", 0.19], ["glass", 0.02]],
   },
   water: {
-    photo: "water", cls: "plastic", file: "plastic_water.jpg", size: "91.0 KB · 800 × 800 px", ms: 39, real: false,
-    probs: [["plastic", 97.6], ["glass", 1.1], ["trash", 0.7], ["metal", 0.4], ["paper", 0.1], ["cardboard", 0.1]],
+    photo: "water", cls: "plastic", file: "plastic_jug.jpg", size: "14.7 KB · 512 × 384 px", ms: 39,
+    src: "samples/plastic_jug.jpg", dims: [512, 384],
+    probs: [["plastic", 99.72], ["glass", 0.18], ["trash", 0.08], ["paper", 0.02], ["metal", 0.0], ["cardboard", 0.0]],
   },
 };
 
-/** Which photo plays the "general waste" cut (0:40–0:42). */
-export const TRASH_PHOTO: PhotoId = "trash";
-
 /** File-picker listing, alphabetical like a real dialog. */
-export const PICKER_FILES: PhotoId[] = ["cardboard", "glass", "metal", "paper", "plastic", "water", TRASH_PHOTO];
+export const PICKER_FILES: PhotoId[] = ["cardboard", "glass", "metal", "paper", "plastic", "water", "trash"];
 const pickerIndex = (p: PhotoId) => PICKER_FILES.indexOf(p);
 
 /* ------------------------------ Runs ------------------------------- */
@@ -132,7 +124,7 @@ export const RUNS: Run[] = [
   quickRun("glass", 32, 3),
   quickRun("metal", 35, 3),
   quickRun("paper", 38, 2),
-  quickRun(TRASH_PHOTO, 40, 2),
+  quickRun("trash", 40, 2),
   // 0:51–0:57 — final interaction
   { photo: "water", clickT: 51.4, pickerOpen: 51.5, imageIn: 52.2, analyzeClick: 53.7, resultIn: 54.9, end: 57 },
 ];
@@ -338,17 +330,17 @@ const CAM: CamKey[] = [
   { t: 12.6, s: 1.22, x: 430, y: 380 },
   { t: 15.5, s: 1.32, x: 430, y: 330 }, // push in on the preview
   { t: 18.6, s: 1.26, x: 640, y: 380 },
-  { t: 19.9, s: 1.2, x: 800, y: 390 }, // glide to Analyze
-  { t: 22.6, s: 1.2, x: 800, y: 395 }, // result lands: image + result both in frame
-  { t: 25.5, s: 1.16, x: 800, y: 400 },
+  { t: 19.9, s: 1.14, x: 790, y: 390 }, // glide to Analyze
+  { t: 22.6, s: 1.14, x: 790, y: 395 }, // result lands: photo + result both in frame
+  { t: 25.5, s: 1.1, x: 780, y: 400 },
   { t: 28.6, s: 1.04, x: 740, y: 405 },
   { t: 29.4, s: 1.0, x: 720, y: 405 }, // quick cuts: full frame so every swap is readable
   { t: 41.8, s: 1.0, x: 720, y: 405 },
   { t: 50.0, s: 1.0, x: 720, y: 405 }, // pull-back for the "purpose" beat
   { t: 51.9, s: 1.06, x: 720, y: 400 },
   { t: 54.4, s: 1.07, x: 730, y: 400 },
-  { t: 55.6, s: 1.2, x: 800, y: 395 }, // result + check
-  { t: 57.3, s: 1.14, x: 800, y: 400 },
+  { t: 55.6, s: 1.13, x: 790, y: 395 }, // result + check
+  { t: 57.3, s: 1.1, x: 780, y: 400 },
 ];
 
 export function cameraAt(t: number): { s: number; tx: number; ty: number } {

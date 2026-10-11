@@ -47,18 +47,22 @@ No narration audio is included — record these lines and save the file as `publ
 - `public/logo.png` — copied from the app's `public/logo.png`.
 - `public/fonts/` — Geist (same typeface as the app), bundled so rendering works offline.
 - `public/sfx/*.wav` — synthesized click / pop / whoosh / chime / scan sounds (placed per click and result in `Promo.tsx`).
-- `public/samples/*.jpg` — your real test photos (cardboard, glass, metal, paper). Plastic and the "general waste"
-  cut still use illustrations from `src/ui/Photos.tsx` (no plastic photo was supplied).
+- `public/samples/*.jpg` — the seven test photos, all real photographs (no AI-generated or edited images):
+  - cardboard, glass, metal, paper — supplied by the project owner;
+  - plastic (`plastic_bottle.jpg`, `plastic_jug.jpg`) and trash (`trash_wrapper.jpg`) — from the
+    [TrashNet](https://github.com/garythung/trashnet) dataset (Gary Thung & Mindy Yang, MIT License), files
+    `plastic251`, `plastic267` and `trash71`.
 
 ## Note on the numbers
 
-The video is a scripted re-creation, not a screen capture. In `SAMPLES` (`src/timeline.ts`):
+The video is a scripted re-creation of the UI, not a screen capture, but every confidence shown is real: each was
+produced by running `public/model/smart_waste_mobilenetv2.onnx` on that exact photo with the app's own resampler
+(`lib/preprocess.ts`). The metal result matches `docs/screenshot-classifier.png` digit for digit. They live in
+`SAMPLES` in `src/timeline.ts`.
 
-- `real: true` — cardboard 99.49%, glass 98.94%, metal 91.25%, paper 99.18%. These come from running the repo's
-  `public/model/smart_waste_mobilenetv2.onnx` on the exact photo with the app's own resampler (`lib/preprocess.ts`).
-  The metal result matches the screenshot in `docs/screenshot-classifier.png` digit for digit.
-- `real: false` — plastic (98.7%, 97.6%) and the illustrated trash bag (89.5%) are illustrative.
+Two caveats:
 
-`trash_bins.jpg` (overflowing bins) is wired up as `SAMPLES.bins`, but the real model classifies it as **Plastic 93.33%**
-(Trash 2.94%), so the video uses the illustrated bag for the trash cut. Change `TRASH_PHOTO` to `"bins"` to show the real
-result instead, or add a photo the model classifies as trash.
+- The model was trained on TrashNet, so the plastic and trash photos may have been in its training split; the
+  four owner-supplied photos are out-of-sample. Treat the video as a demo, not as an accuracy test.
+- The TrashNet photos were picked because the model classifies them correctly (and they are clear, recognisable items).
+  The owner's overflowing-bins photo was not used because the model calls it Plastic 93.3%.
