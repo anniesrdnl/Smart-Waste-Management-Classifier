@@ -1,5 +1,6 @@
 import React from "react";
-import type { PhotoId } from "../timeline";
+import { Img, staticFile } from "remotion";
+import { SAMPLES, type PhotoId } from "../timeline";
 
 /**
  * Studio-style illustrations used as the "uploaded photos".
@@ -235,10 +236,15 @@ const MAP: Record<PhotoId, React.FC> = {
   paper: Paper,
   trash: Trash,
   water: Water,
+  bins: Trash,
 };
 
-export const Photo: React.FC<{ id: PhotoId; style?: React.CSSProperties }> = ({ id, style }) => {
-  const Cmp = MAP[id];
+export const Photo: React.FC<{ id: PhotoId; style?: React.CSSProperties; fit?: "cover" | "contain" }> = ({ id, style, fit = "cover" }) => {
+  const src = SAMPLES[id].src;
+  if (src) {
+    return <Img src={staticFile(src)} style={{ width: "100%", height: "100%", objectFit: fit, display: "block", ...style }} />;
+  }
+  const Cmp = MAP[id] ?? MAP.trash;
   return (
     <div style={{ width: "100%", height: "100%", ...style }}>
       <Cmp />

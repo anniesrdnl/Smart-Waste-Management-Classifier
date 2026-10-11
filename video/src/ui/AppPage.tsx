@@ -279,6 +279,15 @@ const Dropzone: React.FC<{ hover: boolean; pressed: boolean }> = ({ hover, press
   </div>
 );
 
+/** Fit a photo of the given pixel size inside the preview area, like object-contain. */
+const AREA_W = DROP.w - 66;
+const AREA_H = DROP.h - 120;
+const boxFor = (dims?: [number, number]): React.CSSProperties => {
+  const aspect = dims ? dims[0] / dims[1] : 1;
+  const w = Math.min(AREA_W, AREA_H * aspect);
+  return { width: w, height: w / aspect };
+};
+
 const Preview: React.FC<{
   run: Run; phase: "selected" | "classifying" | "result"; since: number; t: number; hoverReplace: boolean; replacePressed: boolean;
 }> = ({ run, phase, since, t, hoverReplace, replacePressed }) => {
@@ -305,11 +314,11 @@ const Preview: React.FC<{
       >
         <div
           style={{
-            height: "100%", aspectRatio: "1", borderRadius: 6, overflow: "hidden", boxShadow: "0 8px 24px rgb(28 31 29 / 0.14)",
+            ...boxFor(s.dims), borderRadius: 6, overflow: "hidden", boxShadow: "0 8px 24px rgb(28 31 29 / 0.14)",
             opacity: appear, transform: `scale(${0.94 + 0.06 * appear})`, position: "relative",
           }}
         >
-          <Photo id={run.photo} />
+          <Photo id={run.photo} fit="contain" />
           {phase === "classifying" && (
             <div style={{ position: "absolute", inset: 0, background: "rgb(47 154 82 / 0.07)" }}>
               <div style={{ position: "absolute", left: 0, right: 0, top: `${sweep * 100}%`, height: 3, background: C.brand500, boxShadow: "0 0 18px 4px rgb(47 154 82 / 0.5)" }} />

@@ -47,11 +47,18 @@ No narration audio is included — record these lines and save the file as `publ
 - `public/logo.png` — copied from the app's `public/logo.png`.
 - `public/fonts/` — Geist (same typeface as the app), bundled so rendering works offline.
 - `public/sfx/*.wav` — synthesized click / pop / whoosh / chime / scan sounds (placed per click and result in `Promo.tsx`).
-- `src/ui/Photos.tsx` — the seven "uploaded photos" are **illustrations**. To use real photos, render
-  `<Img src={staticFile("samples/…jpg")} />` in `Photo` instead.
+- `public/samples/*.jpg` — your real test photos (cardboard, glass, metal, paper). Plastic and the "general waste"
+  cut still use illustrations from `src/ui/Photos.tsx` (no plastic photo was supplied).
 
 ## Note on the numbers
 
-The video is a scripted re-creation, not a screen capture of the live model. The confidence values shown
-(98.7%, 96.4%, …) are illustrative and defined in `SAMPLES` in `src/timeline.ts`. For evidence-grade footage,
-screen-record the real app and use this project for the overlays, subtitles and end cards.
+The video is a scripted re-creation, not a screen capture. In `SAMPLES` (`src/timeline.ts`):
+
+- `real: true` — cardboard 99.49%, glass 98.94%, metal 91.25%, paper 99.18%. These come from running the repo's
+  `public/model/smart_waste_mobilenetv2.onnx` on the exact photo with the app's own resampler (`lib/preprocess.ts`).
+  The metal result matches the screenshot in `docs/screenshot-classifier.png` digit for digit.
+- `real: false` — plastic (98.7%, 97.6%) and the illustrated trash bag (89.5%) are illustrative.
+
+`trash_bins.jpg` (overflowing bins) is wired up as `SAMPLES.bins`, but the real model classifies it as **Plastic 93.33%**
+(Trash 2.94%), so the video uses the illustrated bag for the trash cut. Change `TRASH_PHOTO` to `"bins"` to show the real
+result instead, or add a photo the model classifies as trash.
