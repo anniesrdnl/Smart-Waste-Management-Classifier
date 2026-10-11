@@ -1,11 +1,12 @@
 import React from "react";
 import { AbsoluteFill, Easing, Html5Audio, Sequence, interpolate, staticFile, useCurrentFrame } from "remotion";
-import { C, FONT, FPS, STAGE_H, STAGE_W, VOICEOVER_FILE, sec } from "./theme";
+import { C, FONT, FPS, STAGE_H, STAGE_W, sec } from "./theme";
 import { CARD, CLICKS, DROP, RESULT_PANEL, RUNS, SAMPLES, VIEW_H, VIEW_W, cameraAt, cursorAt } from "./timeline";
 import { AppPage } from "./ui/AppPage";
 import { BrandCard } from "./ui/BrandCard";
 import { Cursor } from "./ui/Cursor";
-import { Overlays } from "./ui/Overlays";
+import { Overlays, Subtitles } from "./ui/Overlays";
+import { NARRATION } from "./narration";
 import { Lock } from "lucide-react";
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
@@ -106,22 +107,15 @@ export const Promo: React.FC = () => {
       <BrandCard local={t - 57.0} tagline="Classify Smarter. Manage Waste Better." opacity={endIn} titleAt={0.45} taglineAt={1.0} />
 
       {/* Subtitles stay on top of the end card too */}
-      {t > 57.0 && <EndCaption t={t} />}
+      <Subtitles t={t} />
 
       <Sfx />
-      {VOICEOVER_FILE && <Html5Audio src={staticFile(VOICEOVER_FILE)} />}
+      {NARRATION.map((n) => (
+        <Sequence key={n.file} from={sec(n.start)} durationInFrames={sec(n.dur) + 6} layout="none">
+          <Html5Audio src={staticFile(n.file)} volume={1} />
+        </Sequence>
+      ))}
     </AbsoluteFill>
-  );
-};
-
-const EndCaption: React.FC<{ t: number }> = ({ t }) => {
-  const a = interpolate(t, [57.4, 57.8, 59.7, 60], [0, 1, 1, 0], clamp);
-  return (
-    <div style={{ position: "absolute", left: 0, bottom: 20, width: STAGE_W, display: "flex", justifyContent: "center", opacity: a }}>
-      <div style={{ maxWidth: 1560, textAlign: "center", fontFamily: FONT, fontSize: 28, fontWeight: 600, lineHeight: "37px", color: "#fff", background: "rgb(255 255 255 / 0.1)", border: "1px solid rgb(255 255 255 / 0.18)", padding: "9px 30px", borderRadius: 18, backdropFilter: "blur(8px)" }}>
-        Smart Waste Management Classifier. Classify smarter, manage waste better.
-      </div>
-    </div>
   );
 };
 

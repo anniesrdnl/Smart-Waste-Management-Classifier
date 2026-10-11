@@ -28,19 +28,23 @@ To retime a beat, edit `RUNS` (upload/analyze/result times), `CAPTIONS`, or the 
 
 ## Voice-over
 
-No narration audio is included — record these lines and save the file as `public/voiceover.mp3`, then set
-`VOICEOVER_FILE = "voiceover.mp3"` in `src/theme.ts`. The on-screen subtitles already match the timings below.
+The narration is an AI-generated female voice ([Kokoro](https://github.com/thewh1teagle/kokoro-onnx), voice `af_heart`,
+Apache-2.0), one WAV per line in `public/narration/`. Start times and durations are in `src/narration.ts`, and the
+subtitles are timed from the same data, so editing a line's `start` moves both. Two lines are sped up slightly
+(1.1× and 1.2×) so the script fits the 60-second runtime; the closing line starts at 0:55.5 so it finishes before the end.
 
 | Start | Line |
 |---|---|
-| 0:00 | Can artificial intelligence help us identify waste in just seconds? |
-| 0:05 | Our Smart Waste Management Classifier uses computer vision to identify different types of waste from uploaded images. |
-| 0:11 | To begin, the user simply uploads an image of the waste they want to identify. |
+| 0:00.5 | Can artificial intelligence help us identify waste in just seconds? |
+| 0:04.9 | Our Smart Waste Management Classifier uses computer vision to identify different types of waste from uploaded images. |
+| 0:12 | To begin, the user simply uploads an image of the waste they want to identify. |
 | 0:20 | The trained model analyzes the image and predicts its waste category, together with its confidence score. |
 | 0:29 | The system can classify six waste categories: cardboard, glass, metal, paper, plastic, and trash. |
 | 0:42 | This provides users with a simple and accessible way to recognize different waste materials and support proper waste classification. |
 | 0:51 | One image, one prediction, and a smarter approach to understanding waste. |
-| 0:57 | Smart Waste Management Classifier. Classify smarter, manage waste better. |
+| 0:55.5 | Smart Waste Management Classifier. Classify smarter, manage waste better. |
+
+To re-voice it, replace the WAVs (or regenerate them with a different Kokoro voice) and update `NARRATION`.
 
 ## Assets
 

@@ -354,16 +354,3 @@ export function cameraAt(t: number): { s: number; tx: number; ty: number } {
   const ty = Math.min(0, Math.max(VIEW_H - s * VIEW_H, VIEW_H / 2 - s * fy));
   return { s, tx, ty };
 }
-
-/* ------------------------------ Captions --------------------------- */
-
-export const CAPTIONS: { from: number; to: number; text: string }[] = [
-  { from: 0.5, to: 4.9, text: "Can artificial intelligence help us identify waste in just seconds?" },
-  { from: 5.2, to: 10.9, text: "Our Smart Waste Management Classifier uses computer vision to identify different types of waste from uploaded images." },
-  { from: 11.2, to: 19.8, text: "To begin, the user simply uploads an image of the waste they want to identify." },
-  { from: 20.1, to: 28.8, text: "The trained model analyzes the image and predicts its waste category, together with its confidence score." },
-  { from: 29.2, to: 41.8, text: "The system can classify six waste categories: cardboard, glass, metal, paper, plastic, and trash." },
-  { from: 42.2, to: 50.8, text: "This provides users with a simple and accessible way to recognize different waste materials and support proper waste classification." },
-  { from: 51.2, to: 56.8, text: "One image, one prediction, and a smarter approach to understanding waste." },
-  { from: 57.2, to: 59.9, text: "Smart Waste Management Classifier. Classify smarter, manage waste better." },
-];

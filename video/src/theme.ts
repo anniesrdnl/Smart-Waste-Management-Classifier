@@ -39,6 +39,3 @@ export const STAGE_H = 1080;
 
 /** Seconds → frames. */
 export const sec = (s: number) => Math.round(s * FPS);
-
-/** Set to e.g. "voiceover.mp3" (placed in public/) once the narration is recorded. */
-export const VOICEOVER_FILE: string | null = null;

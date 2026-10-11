@@ -2,7 +2,8 @@ import React from "react";
 import { Easing, interpolate } from "remotion";
 import { Check, ChevronRight, Cylinder, Milk, Newspaper, Package, ScanSearch, Trash2, Upload, Wine, Zap, type LucideIcon } from "lucide-react";
 import { C, FONT, STAGE_W } from "../theme";
-import { CAPTIONS, CLASS_ORDER, LABEL, RUNS, SAMPLES, type ClassId } from "../timeline";
+import { NARRATION } from "../narration";
+import { CLASS_ORDER, LABEL, RUNS, SAMPLES, type ClassId } from "../timeline";
 
 const ICONS: Record<ClassId, LucideIcon> = { cardboard: Package, glass: Wine, metal: Cylinder, paper: Newspaper, plastic: Milk, trash: Trash2 };
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
@@ -137,20 +138,23 @@ const ResultPop: React.FC<{ t: number }> = ({ t }) => {
 
 /* -------------------------------- Subtitles -------------------------------- */
 
-const Subtitles: React.FC<{ t: number }> = ({ t }) => {
-  const cap = CAPTIONS.find((c) => t >= c.from && t <= c.to);
-  if (!cap) return null;
-  const inP = out(interpolate(t, [cap.from, cap.from + 0.25], [0, 1], clamp));
-  const outP = interpolate(t, [cap.to - 0.2, cap.to], [1, 0], clamp);
+export const Subtitles: React.FC<{ t: number }> = ({ t }) => {
+  // Timed to the narration audio: each line shows while it is spoken.
+  const line = NARRATION.find((n) => t >= n.start - 0.05 && t <= n.start + n.dur + 0.3);
+  if (!line) return null;
+  const inP = out(interpolate(t, [line.start - 0.05, line.start + 0.2], [0, 1], clamp));
+  const outP = interpolate(t, [line.start + line.dur + 0.1, line.start + line.dur + 0.3], [1, 0], clamp);
+  // No backdrop: dark text with a soft light halo on the light stage, white text with a soft shadow once the dark end card is up.
+  const onDark = interpolate(t, [57.0, 57.7], [0, 1], clamp);
+  const channel = (light: number, dark: number) => Math.round(light + (dark - light) * onDark);
+  const color = `rgb(${channel(9, 255)} ${channel(32, 255)} ${channel(19, 255)})`;
+  const shadow = onDark > 0.5
+    ? "0 2px 14px rgb(0 0 0 / 0.75), 0 0 3px rgb(0 0 0 / 0.6)"
+    : "0 0 14px rgb(255 255 255 / 0.95), 0 0 6px rgb(255 255 255 / 0.9), 0 0 2px rgb(255 255 255 / 0.9)";
   return (
-    <div style={{ position: "absolute", left: 0, bottom: 20, width: STAGE_W, display: "flex", justifyContent: "center", opacity: Math.min(inP, outP), transform: `translateY(${(1 - inP) * 10}px)` }}>
-      <div
-        style={{
-          maxWidth: 1560, textAlign: "center", fontFamily: FONT, fontSize: 28, fontWeight: 600, lineHeight: "37px", color: "#fff", background: "rgb(9 28 17 / 0.9)",
-          padding: "8px 28px", borderRadius: 18,
-        }}
-      >
-        {cap.text}
+    <div style={{ position: "absolute", left: 0, bottom: 22, width: STAGE_W, display: "flex", justifyContent: "center", opacity: Math.min(inP, outP), transform: `translateY(${(1 - inP) * 10}px)` }}>
+      <div style={{ maxWidth: 1560, textAlign: "center", fontFamily: FONT, fontSize: 31, fontWeight: 700, lineHeight: "40px", color, textShadow: shadow }}>
+        {line.text}
       </div>
     </div>
   );
@@ -200,7 +204,6 @@ export const Overlays: React.FC<{ t: number; hidden: boolean }> = ({ t, hidden }
         )}
       </TopSlot>
       <ResultPop t={t} />
-      <Subtitles t={t} />
     </div>
   );
 };
