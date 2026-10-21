@@ -1,0 +1,34 @@
+{
+  "test_samples": 1682,
+  "test_loss": 0.4238561987876892,
+  "test_accuracy": 0.88287752866745,
+  "macro_precision": 0.8869186331964801,
+  "macro_recall": 0.8822753237922969,
+  "macro_f1": 0.8837978088337187,
+  "weighted_precision": 0.8839333445737771,
+  "weighted_recall": 0.8828775267538644,
+  "weighted_f1": 0.8826895638799915,
+  "by_source": {
+    "trashnet": {
+      "test_images": 377,
+      "accuracy": 0.8355437665782494,
+      "macro_precision": 0.811990634067247,
+      "macro_recall": 0.7606705225557685,
+      "macro_f1": 0.7622915105083825
+    },
+    "realwaste": {
+      "test_images": 538,
+      "accuracy": 0.8252788104089219,
+      "macro_precision": 0.8310500537478736,
+      "macro_recall": 0.821923319007718,
+      "macro_f1": 0.8234240067112001
+    },
+    "garbage": {
+      "test_images": 767,
+      "accuracy": 0.9465449804432855,
+      "macro_precision": 0.9455274683514641,
+      "macro_recall": 0.9472200712885147,
+      "macro_f1": 0.9462806101451983
+    }
+  }
+}
