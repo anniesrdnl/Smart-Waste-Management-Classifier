@@ -156,10 +156,10 @@ async function importOrt(): Promise<OrtModule> {
   return ort;
 }
 
-async function fetchModel(fileName: string): Promise<ArrayBuffer> {
+async function fetchModel(fileName: string, version: string): Promise<ArrayBuffer> {
   let response: Response;
   try {
-    response = await fetch(`${MODEL_BASE_PATH}${fileName}`);
+    response = await fetch(`${MODEL_BASE_PATH}${fileName}?v=${encodeURIComponent(version)}`);
   } catch (error) {
     throw new ClassifierError("model-load-failed", undefined, { cause: error });
   }
@@ -195,7 +195,7 @@ function toPrediction(scores: Float32Array, metadata: ModelMetadata, inferenceMs
 async function createClassifier(): Promise<WasteClassifierModel> {
   assertBrowserSupport();
   const metadata = await loadModelMetadata();
-  const [ort, modelBuffer] = await Promise.all([importOrt(), fetchModel(metadata.modelFile)]);
+  const [ort, modelBuffer] = await Promise.all([importOrt(), fetchModel(metadata.modelFile, metadata.modelVersion)]);
 
   let session: Ort.InferenceSession;
   try {
